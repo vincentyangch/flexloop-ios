@@ -55,10 +55,20 @@ final class ActiveWorkoutViewModel {
     }
 
     func completeWorkout(context: ModelContext) {
-        currentSession?.completedAt = Date()
+        let completedAt = Date()
+        currentSession?.completedAt = completedAt
         try? context.save()
         isWorkoutActive = false
         stopRestTimer()
+
+        // Save workout to HealthKit
+        if let startedAt = currentSession?.startedAt {
+            Task {
+                try? await HealthKitManager.shared.saveWorkout(
+                    startDate: startedAt, endDate: completedAt, caloriesBurned: nil
+                )
+            }
+        }
     }
 
     func startRestTimer(seconds: Int) {

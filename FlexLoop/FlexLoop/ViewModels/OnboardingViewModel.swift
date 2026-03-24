@@ -49,6 +49,9 @@ final class OnboardingViewModel {
             context.insert(cachedUser)
             try context.save()
 
+            // Request HealthKit authorization
+            try? await HealthKitManager.shared.requestAuthorization()
+
             isComplete = true
         } catch {
             errorMessage = "Failed to create profile. Check your server connection."
