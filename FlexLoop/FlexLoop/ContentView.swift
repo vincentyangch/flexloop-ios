@@ -24,8 +24,8 @@ struct ContentView: View {
                 .tabItem { Label("Workout", systemImage: "figure.strengthtraining.traditional") }
             PlanView()
                 .tabItem { Label("Plan", systemImage: "calendar") }
-            HistoryView()
-                .tabItem { Label("History", systemImage: "clock.arrow.circlepath") }
+            ProgressTabView()
+                .tabItem { Label("Progress", systemImage: "chart.line.uptrend.xyaxis") }
             AIChatView()
                 .tabItem { Label("AI Coach", systemImage: "brain") }
             SettingsView()
