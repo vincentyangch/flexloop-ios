@@ -2,11 +2,19 @@ import Foundation
 import SwiftData
 import Observation
 
+struct DeloadAlert {
+    let recommended: Bool
+    let confidence: String
+    let reason: String
+    let signals: [String]
+}
+
 @Observable
 final class HomeViewModel {
     var recentSessions: [CachedWorkoutSession] = []
     var weeklySessionCount = 0
     var isLoading = false
+    var deloadAlert: DeloadAlert?
 
     func loadDashboard(context: ModelContext) {
         let descriptor = FetchDescriptor<CachedWorkoutSession>(
@@ -22,5 +30,43 @@ final class HomeViewModel {
             predicate: #Predicate { $0.startedAt >= weekStart }
         )
         weeklySessionCount = (try? context.fetchCount(weekDescriptor)) ?? 0
+    }
+
+    func checkDeload(apiClient: APIClient, userId: Int) async {
+        struct DeloadSignal: Codable {
+            let signal: String
+            let description: String
+            let severity: String
+        }
+
+        struct DeloadResponse: Codable {
+            let deloadRecommended: Bool
+            let confidence: String
+            let reason: String
+            let signals: [DeloadSignal]
+
+            enum CodingKeys: String, CodingKey {
+                case confidence, reason, signals
+                case deloadRecommended = "deload_recommended"
+            }
+        }
+
+        do {
+            let response: DeloadResponse = try await apiClient.get(
+                "/api/deload/\(userId)/check"
+            )
+            if response.deloadRecommended {
+                deloadAlert = DeloadAlert(
+                    recommended: true,
+                    confidence: response.confidence,
+                    reason: response.reason,
+                    signals: response.signals.map { $0.description }
+                )
+            } else {
+                deloadAlert = nil
+            }
+        } catch {
+            // Non-critical — don't show error
+        }
     }
 }
