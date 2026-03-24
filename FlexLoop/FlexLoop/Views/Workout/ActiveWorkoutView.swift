@@ -106,6 +106,13 @@ struct ActiveWorkoutView: View {
                     viewModel.startWorkout(context: context)
                 }
             }
+            .alert("New PR!", isPresented: $viewModel.showPRAlert) {
+                Button("OK") {}
+            } message: {
+                if let pr = viewModel.currentPRAlert {
+                    Text("\(pr.title)\n\(pr.detail)\nPrevious: \(pr.previous, specifier: "%.1f")")
+                }
+            }
         }
     }
 }
