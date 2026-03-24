@@ -40,6 +40,19 @@ struct HomeView: View {
                             .clipShape(RoundedRectangle(cornerRadius: 12))
                     }
 
+                    // Templates shortcut
+                    NavigationLink {
+                        TemplatesListView()
+                    } label: {
+                        Label("My Templates", systemImage: "doc.on.doc")
+                            .font(.subheadline)
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(Color(.secondarySystemBackground))
+                            .clipShape(RoundedRectangle(cornerRadius: 12))
+                    }
+                    .foregroundStyle(.primary)
+
                     // Recent sessions
                     if !viewModel.recentSessions.isEmpty {
                         VStack(alignment: .leading, spacing: 8) {

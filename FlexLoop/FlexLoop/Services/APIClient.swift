@@ -125,6 +125,22 @@ actor APIClient {
         try await post("/api/ai/chat", body: request)
     }
 
+    func fetchTemplates(userId: Int) async throws -> [APITemplate] {
+        try await get("/api/templates", queryItems: [.init(name: "user_id", value: "\(userId)")])
+    }
+
+    func createTemplate(data: APITemplateCreate) async throws -> APITemplate {
+        try await post("/api/templates", body: data)
+    }
+
+    func deleteTemplate(id: Int) async throws {
+        guard let url = buildURL(path: "/api/templates/\(id)") else { throw APIError.invalidURL }
+        var request = URLRequest(url: url)
+        request.httpMethod = "DELETE"
+        let (_, response) = try await session.data(for: request)
+        try validateResponse(response, data: Data())
+    }
+
     func generatePlan(userId: Int) async throws -> APIPlanGenerateResponse {
         try await post("/api/ai/plan/generate", body: APIPlanGenerateRequest(userId: userId))
     }
