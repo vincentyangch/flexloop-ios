@@ -39,7 +39,8 @@ struct SessionDetailView: View {
                         Spacer()
 
                         if let w = set.weight, let r = set.reps {
-                            Text("\(w, specifier: "%.1f")kg x \(r)")
+                            let unit = WeightUnit.current
+                            Text("\(unit.fromKg(w), specifier: "%.1f")\(unit.symbol) x \(r)")
                                 .font(.subheadline.monospacedDigit())
                         }
 

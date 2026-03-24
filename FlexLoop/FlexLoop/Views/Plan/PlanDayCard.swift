@@ -12,7 +12,7 @@ struct PlanDayCard: View {
                     .font(.headline)
                 Spacer()
                 if isToday {
-                    Text("TODAY")
+                    Text(String(localized: "plan.today"))
                         .font(.caption.bold())
                         .padding(.horizontal, 8)
                         .padding(.vertical, 2)

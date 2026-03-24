@@ -8,43 +8,43 @@ struct SettingsView: View {
     var body: some View {
         NavigationStack {
             List {
-                Section("Server") {
-                    NavigationLink("Backend Server") {
+                Section(String(localized: "settings.server")) {
+                    NavigationLink(String(localized: "settings.server")) {
                         ServerConfigView()
                     }
                 }
 
-                Section("Units") {
-                    Picker("Weight Unit", selection: $unitSystem) {
-                        Text("Metric (kg)").tag("metric")
-                        Text("Imperial (lbs)").tag("imperial")
+                Section(String(localized: "settings.weightUnit")) {
+                    Picker(String(localized: "settings.weightUnit"), selection: $unitSystem) {
+                        Text(String(localized: "settings.metric")).tag("metric")
+                        Text(String(localized: "settings.imperial")).tag("imperial")
                     }
                 }
 
-                Section("Workout") {
-                    Toggle("Post-session feedback", isOn: $sessionFeedbackEnabled)
-                    Text("When enabled, you'll be prompted to rate sleep, energy, and soreness after each workout.")
+                Section(String(localized: "tab.workout")) {
+                    Toggle(String(localized: "settings.sessionFeedback"), isOn: $sessionFeedbackEnabled)
+                    Text(String(localized: "settings.sessionFeedbackDesc"))
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
 
-                Section("Tracking") {
-                    Toggle("Measurement reminders", isOn: $measurementReminders)
-                    Text("Reminds you to take body measurements every 2-4 weeks.")
+                Section {
+                    Toggle(String(localized: "settings.measurementReminders"), isOn: $measurementReminders)
+                    Text(String(localized: "settings.measurementRemindersDesc"))
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
 
-                Section("About") {
+                Section {
                     HStack {
-                        Text("Version")
+                        Text(String(localized: "settings.version"))
                         Spacer()
                         Text("1.0.0")
                             .foregroundStyle(.secondary)
                     }
                 }
             }
-            .navigationTitle("Settings")
+            .navigationTitle(String(localized: "settings.title"))
         }
     }
 }

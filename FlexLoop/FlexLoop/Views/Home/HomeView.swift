@@ -16,7 +16,7 @@ struct HomeView: View {
                             HStack {
                                 Image(systemName: "exclamationmark.triangle.fill")
                                     .foregroundStyle(.yellow)
-                                Text("Deload Recommended")
+                                Text(String(localized: "home.deloadRecommended"))
                                     .font(.subheadline.bold())
                                 Spacer()
                                 Text(deload.confidence.uppercased())
@@ -45,10 +45,10 @@ struct HomeView: View {
                     // Weekly streak card
                     HStack {
                         VStack(alignment: .leading) {
-                            Text("This Week")
+                            Text(String(localized: "home.thisWeek"))
                                 .font(.subheadline)
                                 .foregroundStyle(.secondary)
-                            Text("\(viewModel.weeklySessionCount) sessions")
+                            Text(String(localized: "home.sessions \(viewModel.weeklySessionCount)"))
                                 .font(.title2.bold())
                         }
                         Spacer()
@@ -64,7 +64,7 @@ struct HomeView: View {
                     NavigationLink {
                         ActiveWorkoutView()
                     } label: {
-                        Label("Start Workout", systemImage: "play.fill")
+                        Label(String(localized: "home.startWorkout"), systemImage: "play.fill")
                             .font(.headline)
                             .frame(maxWidth: .infinity)
                             .padding()
@@ -77,7 +77,7 @@ struct HomeView: View {
                     NavigationLink {
                         TemplatesListView()
                     } label: {
-                        Label("My Templates", systemImage: "doc.on.doc")
+                        Label(String(localized: "home.myTemplates"), systemImage: "doc.on.doc")
                             .font(.subheadline)
                             .frame(maxWidth: .infinity)
                             .padding()
@@ -89,7 +89,7 @@ struct HomeView: View {
                     // Recent sessions
                     if !viewModel.recentSessions.isEmpty {
                         VStack(alignment: .leading, spacing: 8) {
-                            Text("Recent Sessions")
+                            Text(String(localized: "home.recentSessions"))
                                 .font(.headline)
 
                             ForEach(viewModel.recentSessions, id: \.startedAt) { session in

@@ -1,0 +1,486 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "tab.home" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Home" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "首页" } }
+      }
+    },
+    "tab.workout" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Workout" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "训练" } }
+      }
+    },
+    "tab.plan" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Plan" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "计划" } }
+      }
+    },
+    "tab.progress" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Progress" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "进度" } }
+      }
+    },
+    "tab.aiCoach" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "AI Coach" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "AI教练" } }
+      }
+    },
+    "tab.settings" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Settings" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "设置" } }
+      }
+    },
+    "home.title" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "FlexLoop" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "FlexLoop" } }
+      }
+    },
+    "home.thisWeek" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "This Week" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "本周" } }
+      }
+    },
+    "home.sessions %lld" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "%lld sessions" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "%lld 次训练" } }
+      }
+    },
+    "home.startWorkout" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Start Workout" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "开始训练" } }
+      }
+    },
+    "home.myTemplates" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "My Templates" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "我的模板" } }
+      }
+    },
+    "home.recentSessions" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Recent Sessions" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "最近训练" } }
+      }
+    },
+    "home.deloadRecommended" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Deload Recommended" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "建议减量周" } }
+      }
+    },
+    "workout.title" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Workout" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "训练" } }
+      }
+    },
+    "workout.exercise" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Exercise" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "动作" } }
+      }
+    },
+    "workout.selectExercise" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Select..." } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "选择..." } }
+      }
+    },
+    "workout.warmUp" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Warm-Up" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "热身" } }
+      }
+    },
+    "workout.workingSet" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Working Set" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "正式组" } }
+      }
+    },
+    "workout.logSet" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Log Set" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "记录" } }
+      }
+    },
+    "workout.completed %lld" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Completed (%lld)" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "已完成 (%lld)" } }
+      }
+    },
+    "workout.finish" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Finish" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "完成" } }
+      }
+    },
+    "workout.cancel" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Cancel" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "取消" } }
+      }
+    },
+    "workout.skip" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Skip" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "跳过" } }
+      }
+    },
+    "workout.newPR" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "New PR!" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "新纪录！" } }
+      }
+    },
+    "workout.sets %lld" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "%lld sets" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "%lld 组" } }
+      }
+    },
+    "plan.title" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "My Plan" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "我的计划" } }
+      }
+    },
+    "plan.noActivePlan" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "No Active Plan" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "暂无训练计划" } }
+      }
+    },
+    "plan.generatePlan" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Generate Plan" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "生成计划" } }
+      }
+    },
+    "plan.generating" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "AI is generating your plan..." } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "AI正在生成训练计划..." } }
+      }
+    },
+    "plan.generateDescription" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Generate a personalized training plan with AI." } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "使用AI生成个性化训练计划。" } }
+      }
+    },
+    "plan.today" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "TODAY" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "今天" } }
+      }
+    },
+    "plan.bar" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Bar" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "空杆" } }
+      }
+    },
+    "progress.title" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Progress" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "进度" } }
+      }
+    },
+    "progress.strength" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Strength" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "力量" } }
+      }
+    },
+    "progress.volume" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Volume" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "容量" } }
+      }
+    },
+    "progress.history" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "History" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "历史" } }
+      }
+    },
+    "progress.weeklyVolume" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Weekly Volume by Muscle Group" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "每周各肌群训练量" } }
+      }
+    },
+    "progress.noStrengthData" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "No Strength Data" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "暂无力量数据" } }
+      }
+    },
+    "progress.noVolumeData" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "No Volume Data" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "暂无容量数据" } }
+      }
+    },
+    "aiCoach.title" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "AI Coach" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "AI教练" } }
+      }
+    },
+    "aiCoach.placeholder" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Ask about your training..." } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "问问你的训练..." } }
+      }
+    },
+    "aiCoach.thinking" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Thinking..." } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "思考中..." } }
+      }
+    },
+    "settings.title" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Settings" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "设置" } }
+      }
+    },
+    "settings.server" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Backend Server" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "后端服务器" } }
+      }
+    },
+    "settings.weightUnit" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Weight Unit" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "重量单位" } }
+      }
+    },
+    "settings.metric" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Metric (kg)" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "公制 (kg)" } }
+      }
+    },
+    "settings.imperial" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Imperial (lbs)" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "英制 (lbs)" } }
+      }
+    },
+    "settings.sessionFeedback" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Post-session feedback" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "训练后反馈" } }
+      }
+    },
+    "settings.sessionFeedbackDesc" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "When enabled, you'll be prompted to rate sleep, energy, and soreness after each workout." } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "开启后，每次训练结束时会提示你评估睡眠、精力和酸痛程度。" } }
+      }
+    },
+    "settings.measurementReminders" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Measurement reminders" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "体测提醒" } }
+      }
+    },
+    "settings.measurementRemindersDesc" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Reminds you to take body measurements every 2-4 weeks." } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "每2-4周提醒你进行身体测量。" } }
+      }
+    },
+    "settings.version" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Version" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "版本" } }
+      }
+    },
+    "settings.testConnection" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Test Connection" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "测试连接" } }
+      }
+    },
+    "onboarding.welcome" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Welcome to FlexLoop" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "欢迎使用 FlexLoop" } }
+      }
+    },
+    "onboarding.aboutYou" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "About You" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "关于你" } }
+      }
+    },
+    "onboarding.name" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Name" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "姓名" } }
+      }
+    },
+    "onboarding.gender" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Gender" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "性别" } }
+      }
+    },
+    "onboarding.age" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Age" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "年龄" } }
+      }
+    },
+    "onboarding.height" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Height" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "身高" } }
+      }
+    },
+    "onboarding.weight" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Weight" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "体重" } }
+      }
+    },
+    "onboarding.experience" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Experience" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "经验" } }
+      }
+    },
+    "onboarding.level" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Level" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "水平" } }
+      }
+    },
+    "onboarding.daysPerWeek %lld" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Days per week: %lld" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "每周训练天数: %lld" } }
+      }
+    },
+    "onboarding.next" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Next" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "下一步" } }
+      }
+    },
+    "onboarding.equipment" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Available Equipment" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "可用器械" } }
+      }
+    },
+    "onboarding.selectEquipment" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Select what you have access to:" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "选择你能使用的器械：" } }
+      }
+    },
+    "onboarding.primaryGoal" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Primary Goal" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "主要目标" } }
+      }
+    },
+    "onboarding.createProfile" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Create Profile & Generate Plan" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "创建档案并生成计划" } }
+      }
+    },
+    "templates.title" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Templates" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "模板" } }
+      }
+    },
+    "templates.noTemplates" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "No Templates" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "暂无模板" } }
+      }
+    },
+    "templates.createTemplate" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Create Template" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "创建模板" } }
+      }
+    },
+    "templates.newTemplate" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "New Template" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "新建模板" } }
+      }
+    },
+    "templates.save" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Save" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "保存" } }
+      }
+    },
+    "templates.exercises %lld" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "%lld exercises" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "%lld 个动作" } }
+      }
+    },
+    "history.title" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "History" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "历史" } }
+      }
+    },
+    "history.noWorkouts" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "No Workouts Yet" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "暂无训练记录" } }
+      }
+    },
+    "history.sessionDetail" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Session Detail" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "训练详情" } }
+      }
+    },
+    "common.ok" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "OK" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "确定" } }
+      }
+    },
+    "common.delete" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Delete" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "删除" } }
+      }
+    },
+    "common.loading" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Loading..." } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "加载中..." } }
+      }
+    }
+  },
+  "version" : "1.0"
+}

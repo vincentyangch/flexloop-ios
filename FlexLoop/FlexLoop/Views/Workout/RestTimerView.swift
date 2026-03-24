@@ -17,7 +17,7 @@ struct RestTimerView: View {
 
                 Spacer()
 
-                Button("Skip", action: onStop)
+                Button(String(localized: "workout.skip"), action: onStop)
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
             }

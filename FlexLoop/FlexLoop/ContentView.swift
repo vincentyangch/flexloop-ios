@@ -19,17 +19,17 @@ struct ContentView: View {
     private var mainTabView: some View {
         TabView {
             HomeView()
-                .tabItem { Label("Home", systemImage: "house") }
+                .tabItem { Label(String(localized: "tab.home"), systemImage: "house") }
             ActiveWorkoutView()
-                .tabItem { Label("Workout", systemImage: "figure.strengthtraining.traditional") }
+                .tabItem { Label(String(localized: "tab.workout"), systemImage: "figure.strengthtraining.traditional") }
             PlanView()
-                .tabItem { Label("Plan", systemImage: "calendar") }
+                .tabItem { Label(String(localized: "tab.plan"), systemImage: "calendar") }
             ProgressTabView()
-                .tabItem { Label("Progress", systemImage: "chart.line.uptrend.xyaxis") }
+                .tabItem { Label(String(localized: "tab.progress"), systemImage: "chart.line.uptrend.xyaxis") }
             AIChatView()
-                .tabItem { Label("AI Coach", systemImage: "brain") }
+                .tabItem { Label(String(localized: "tab.aiCoach"), systemImage: "brain") }
             SettingsView()
-                .tabItem { Label("Settings", systemImage: "gear") }
+                .tabItem { Label(String(localized: "tab.settings"), systemImage: "gear") }
         }
         .onChange(of: scenePhase) { _, newPhase in
             if newPhase == .active {

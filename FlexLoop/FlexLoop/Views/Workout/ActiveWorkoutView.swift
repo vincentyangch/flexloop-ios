@@ -48,13 +48,13 @@ struct ActiveWorkoutView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Finish") {
+                    Button(String(localized: "workout.finish")) {
                         viewModel.completeWorkout(context: context)
                         dismiss()
                     }
                 }
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") { dismiss() }
+                    Button(String(localized: "workout.cancel")) { dismiss() }
                 }
             }
             .onAppear {
@@ -62,8 +62,8 @@ struct ActiveWorkoutView: View {
                     viewModel.startWorkout(context: context)
                 }
             }
-            .alert("New PR!", isPresented: $viewModel.showPRAlert) {
-                Button("OK") {}
+            .alert(String(localized: "workout.newPR"), isPresented: $viewModel.showPRAlert) {
+                Button(String(localized: "common.ok")) {}
             } message: {
                 if let pr = viewModel.currentPRAlert {
                     Text("\(pr.title)\n\(pr.detail)\nPrevious: \(pr.previous, specifier: "%.1f")")
@@ -82,9 +82,9 @@ struct ActiveWorkoutView: View {
     // MARK: - Sections
 
     private var exerciseSection: some View {
-        Section("Exercise") {
-            Picker("Select Exercise", selection: $selectedExerciseId) {
-                Text("Select...").tag(nil as Int?)
+        Section(String(localized: "workout.exercise")) {
+            Picker(String(localized: "workout.selectExercise"), selection: $selectedExerciseId) {
+                Text(String(localized: "workout.selectExercise")).tag(nil as Int?)
                 ForEach(exercises) { exercise in
                     Text(exercise.name).tag(exercise.serverId as Int?)
                 }
@@ -93,13 +93,14 @@ struct ActiveWorkoutView: View {
     }
 
     private var warmupSection: some View {
-        Section("Warm-Up") {
+        let unit = WeightUnit.current
+        return Section(String(localized: "workout.warmUp")) {
             ForEach(Array(warmupSets.enumerated()), id: \.element.id) { index, warmup in
                 HStack {
                     Image(systemName: warmup.completed ? "checkmark.circle.fill" : "circle")
                         .foregroundStyle(warmup.completed ? .green : .secondary)
 
-                    Text("\(warmup.weight, specifier: "%.1f") kg")
+                    Text("\(unit.fromKg(warmup.weight), specifier: "%.1f") \(unit.symbol)")
                         .font(.subheadline.monospacedDigit())
                     Text("x \(warmup.reps)")
                         .font(.subheadline)
@@ -109,7 +110,7 @@ struct ActiveWorkoutView: View {
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     } else {
-                        Text("Bar")
+                        Text(String(localized: "plan.bar"))
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     }
@@ -136,7 +137,7 @@ struct ActiveWorkoutView: View {
     }
 
     private var logSetSection: some View {
-        Section("Working Set") {
+        Section(String(localized: "workout.workingSet")) {
             SetEntryRow(
                 setNumber: viewModel.loggedSets.filter { $0.setType != .warmUp }.count + 1,
                 previousWeight: viewModel.loggedSets.last?.weight,
@@ -147,7 +148,7 @@ struct ActiveWorkoutView: View {
                 setType: $currentSetType
             )
 
-            Button("Log Set") {
+            Button(String(localized: "workout.logSet")) {
                 guard let exerciseId = selectedExerciseId else { return }
                 viewModel.logSet(
                     exerciseId: exerciseId,
@@ -175,7 +176,8 @@ struct ActiveWorkoutView: View {
     }
 
     private var completedSetsSection: some View {
-        Section("Completed (\(viewModel.loggedSets.count))") {
+        let unit = WeightUnit.current
+        return Section(String(localized: "workout.completed \(viewModel.loggedSets.count)")) {
             ForEach(viewModel.loggedSets, id: \.setNumber) { set in
                 HStack {
                     Text(set.setType == .warmUp ? "WU" : "Set \(set.setNumber)")
@@ -183,7 +185,7 @@ struct ActiveWorkoutView: View {
                         .foregroundStyle(set.setType == .warmUp ? .secondary : .primary)
                     Spacer()
                     if let w = set.weight, let r = set.reps {
-                        Text("\(w, specifier: "%.1f") x \(r)")
+                        Text("\(unit.fromKg(w), specifier: "%.1f") x \(r)")
                     }
                     if let rpe = set.rpe {
                         Text("RPE \(rpe, specifier: "%.1f")")
