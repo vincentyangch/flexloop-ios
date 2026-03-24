@@ -125,6 +125,10 @@ actor APIClient {
         try await post("/api/ai/chat", body: request)
     }
 
+    func generatePlan(userId: Int) async throws -> APIPlanGenerateResponse {
+        try await post("/api/ai/plan/generate", body: APIPlanGenerateRequest(userId: userId))
+    }
+
     func checkHealth() async throws -> APIHealthResponse {
         try await get("/api/health")
     }

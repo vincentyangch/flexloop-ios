@@ -22,6 +22,8 @@ struct ContentView: View {
                 .tabItem { Label("Home", systemImage: "house") }
             ActiveWorkoutView()
                 .tabItem { Label("Workout", systemImage: "figure.strengthtraining.traditional") }
+            PlanView()
+                .tabItem { Label("Plan", systemImage: "calendar") }
             HistoryView()
                 .tabItem { Label("History", systemImage: "clock.arrow.circlepath") }
             AIChatView()

@@ -198,6 +198,82 @@ struct AIChatResponse: Codable, Sendable {
     }
 }
 
+// MARK: - Plan
+
+struct APIPlanGenerateRequest: Codable, Sendable {
+    let userId: Int
+
+    enum CodingKeys: String, CodingKey {
+        case userId = "user_id"
+    }
+}
+
+struct APIPlanExercise: Codable, Sendable {
+    let exerciseId: Int
+    let sets: Int
+    let reps: Int
+    let weight: Double?
+    let rpeTarget: Double?
+    let notes: String?
+
+    enum CodingKeys: String, CodingKey {
+        case sets, reps, weight, notes
+        case exerciseId = "exercise_id"
+        case rpeTarget = "rpe_target"
+    }
+}
+
+struct APIPlanExerciseGroup: Codable, Sendable {
+    let groupType: String
+    let restAfterGroupSec: Int
+    let exercises: [APIPlanExercise]
+
+    enum CodingKeys: String, CodingKey {
+        case exercises
+        case groupType = "group_type"
+        case restAfterGroupSec = "rest_after_group_sec"
+    }
+}
+
+struct APIPlanDay: Codable, Sendable {
+    let dayNumber: Int
+    let label: String
+    let focus: String
+    let exerciseGroups: [APIPlanExerciseGroup]
+
+    enum CodingKeys: String, CodingKey {
+        case label, focus
+        case dayNumber = "day_number"
+        case exerciseGroups = "exercise_groups"
+    }
+}
+
+struct APIPlanGenerateResponse: Codable, Sendable {
+    let status: String
+    let planId: Int?
+    let planName: String?
+    let splitType: String?
+    let blockStart: String?
+    let blockEnd: String?
+    let days: [APIPlanDay]?
+    let inputTokens: Int?
+    let outputTokens: Int?
+    let message: String?
+    let rawResponse: String?
+
+    enum CodingKeys: String, CodingKey {
+        case status, days, message
+        case planId = "plan_id"
+        case planName = "plan_name"
+        case splitType = "split_type"
+        case blockStart = "block_start"
+        case blockEnd = "block_end"
+        case inputTokens = "input_tokens"
+        case outputTokens = "output_tokens"
+        case rawResponse = "raw_response"
+    }
+}
+
 // MARK: - Health
 
 struct APIHealthResponse: Codable, Sendable {
