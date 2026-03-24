@@ -1,22 +1,46 @@
 import SwiftUI
 
 struct WatchWorkoutView: View {
-    @State private var currentExercise = "Bench Press"
+    let exercises: [WatchExerciseData]
+    @EnvironmentObject var sessionManager: WatchSessionManager
+
+    @State private var currentIndex = 0
     @State private var setNumber = 1
-    @State private var weight = 80.0
+    @State private var weight = 0.0
     @State private var reps = 8
     @State private var showRestTimer = false
     @State private var totalSets = 0
     @Environment(\.dismiss) private var dismiss
 
-    var body: some View {
-        VStack(spacing: 8) {
-            Text(currentExercise)
-                .font(.headline)
-                .lineLimit(1)
-                .minimumScaleFactor(0.7)
+    private var currentExercise: WatchExerciseData? {
+        guard currentIndex < exercises.count else { return nil }
+        return exercises[currentIndex]
+    }
 
-            Text("Set \(setNumber)")
+    var body: some View {
+        if let exercise = currentExercise {
+            exerciseView(exercise)
+                .onAppear { loadExerciseDefaults(exercise) }
+                .navigationBarBackButtonHidden(true)
+                .sheet(isPresented: $showRestTimer) {
+                    WatchRestTimerView(seconds: exercise.restSec) {
+                        showRestTimer = false
+                    }
+                }
+        } else {
+            workoutCompleteView
+        }
+    }
+
+    private func exerciseView(_ exercise: WatchExerciseData) -> some View {
+        VStack(spacing: 6) {
+            Text(exercise.name)
+                .font(.headline)
+                .lineLimit(2)
+                .minimumScaleFactor(0.6)
+                .multilineTextAlignment(.center)
+
+            Text("Set \(setNumber) of \(exercise.sets)")
                 .font(.caption)
                 .foregroundStyle(.secondary)
 
@@ -45,9 +69,7 @@ struct WatchWorkoutView: View {
 
             HStack(spacing: 12) {
                 Button {
-                    totalSets += 1
-                    setNumber += 1
-                    showRestTimer = true
+                    logSet(exercise)
                 } label: {
                     Image(systemName: "checkmark")
                 }
@@ -67,15 +89,51 @@ struct WatchWorkoutView: View {
                 .font(.caption2)
                 .foregroundStyle(.secondary)
         }
-        .navigationBarBackButtonHidden(true)
-        .sheet(isPresented: $showRestTimer) {
-            WatchRestTimerView(seconds: 90) {
-                showRestTimer = false
-            }
+    }
+
+    private var workoutCompleteView: some View {
+        VStack(spacing: 12) {
+            Image(systemName: "checkmark.circle.fill")
+                .font(.largeTitle)
+                .foregroundStyle(.green)
+            Text("Workout Complete!")
+                .font(.headline)
+            Text("\(totalSets) total sets")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+            Button("Done") { dismiss() }
+                .buttonStyle(.borderedProminent)
         }
+    }
+
+    private func loadExerciseDefaults(_ exercise: WatchExerciseData) {
+        weight = exercise.weight ?? 0
+        reps = exercise.reps
+        setNumber = 1
+    }
+
+    private func logSet(_ exercise: WatchExerciseData) {
+        totalSets += 1
+
+        if setNumber >= exercise.sets {
+            // Move to next exercise
+            setNumber = 1
+            currentIndex += 1
+            if let next = currentExercise {
+                loadExerciseDefaults(next)
+            }
+        } else {
+            setNumber += 1
+        }
+
+        showRestTimer = true
     }
 }
 
 #Preview {
-    WatchWorkoutView()
+    WatchWorkoutView(exercises: [
+        WatchExerciseData(name: "Bench Press", sets: 4, reps: 8, weight: 80,
+                          rpeTarget: 8, groupType: "straight", restSec: 90),
+    ])
+    .environmentObject(WatchSessionManager.shared)
 }

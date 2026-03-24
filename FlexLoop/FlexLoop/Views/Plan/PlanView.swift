@@ -109,5 +109,6 @@ struct PlanView: View {
         guard let user = users.first else { return }
         let apiClient = APIClient(config: .current)
         await viewModel.generateNewPlan(apiClient: apiClient, userId: user.serverId)
+        viewModel.sendPlanToWatch()
     }
 }

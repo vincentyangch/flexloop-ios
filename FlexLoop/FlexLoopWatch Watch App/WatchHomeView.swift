@@ -1,9 +1,19 @@
 import SwiftUI
 
 struct WatchHomeView: View {
-    @State private var todayLabel = "Push Day"
-    @State private var exerciseCount = 6
-    @State private var isWorkoutActive = false
+    @EnvironmentObject var sessionManager: WatchSessionManager
+
+    private var todayLabel: String {
+        sessionManager.todayPlan?.label ?? "No Plan"
+    }
+
+    private var exerciseCount: Int {
+        sessionManager.todayPlan?.exercises.count ?? 0
+    }
+
+    private var hasPlan: Bool {
+        sessionManager.todayPlan != nil
+    }
 
     var body: some View {
         NavigationStack {
@@ -14,16 +24,25 @@ struct WatchHomeView: View {
 
                 Text(todayLabel)
                     .font(.headline)
+                    .multilineTextAlignment(.center)
 
-                Text("\(exerciseCount) exercises")
-                    .font(.caption2)
-                    .foregroundStyle(.secondary)
+                if hasPlan {
+                    Text("\(exerciseCount) exercises")
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
 
-                NavigationLink("Start") {
-                    WatchWorkoutView()
+                    NavigationLink("Start") {
+                        WatchWorkoutView(exercises: sessionManager.todayPlan?.exercises ?? [])
+                            .environmentObject(sessionManager)
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .tint(.green)
+                } else {
+                    Text("Open FlexLoop on iPhone\nto generate a plan")
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                        .multilineTextAlignment(.center)
                 }
-                .buttonStyle(.borderedProminent)
-                .tint(.green)
             }
             .navigationTitle("FlexLoop")
             .navigationBarTitleDisplayMode(.inline)
@@ -33,4 +52,5 @@ struct WatchHomeView: View {
 
 #Preview {
     WatchHomeView()
+        .environmentObject(WatchSessionManager.shared)
 }

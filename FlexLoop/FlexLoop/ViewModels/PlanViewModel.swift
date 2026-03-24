@@ -64,4 +64,46 @@ final class PlanViewModel {
     func exerciseName(for id: Int) -> String {
         exerciseNames[id] ?? "Exercise #\(id)"
     }
+
+    func sendPlanToWatch() {
+        guard let plan, let days = plan.days else { return }
+
+        let todayDayOfWeek: Int = {
+            let weekday = Calendar.current.component(.weekday, from: Date())
+            return weekday == 1 ? 7 : weekday - 1
+        }()
+
+        let watchDays = days.map { day in
+            let exercises = day.exerciseGroups.flatMap { group in
+                group.exercises.map { ex in
+                    WatchExerciseData(
+                        name: exerciseName(for: ex.exerciseId),
+                        sets: ex.sets,
+                        reps: ex.reps,
+                        weight: ex.weight,
+                        rpeTarget: ex.rpeTarget,
+                        groupType: group.groupType,
+                        restSec: group.restAfterGroupSec
+                    )
+                }
+            }
+            return WatchDayData(
+                dayNumber: day.dayNumber,
+                label: day.label,
+                focus: day.focus,
+                exercises: exercises
+            )
+        }
+
+        let todayDay = watchDays.first(where: { $0.dayNumber == todayDayOfWeek })
+            ?? watchDays.first
+
+        let watchPlan = WatchPlanData(
+            planName: plan.planName ?? "Training Plan",
+            todayDay: todayDay,
+            allDays: watchDays
+        )
+
+        PhoneConnectivityManager.shared.sendPlanToWatch(watchPlan)
+    }
 }
