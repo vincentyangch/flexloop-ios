@@ -480,6 +480,36 @@
         "en" : { "stringUnit" : { "state" : "translated", "value" : "Loading..." } },
         "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "加载中..." } }
       }
+    },
+    "exercise.musclesWorked" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Muscles Worked" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "目标肌群" } }
+      }
+    },
+    "exercise.howToPerform" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "How to Perform" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "动作要领" } }
+      }
+    },
+    "exercise.formCues" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Form Cues" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "动作提示" } }
+      }
+    },
+    "exercise.commonMistakes" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Common Mistakes" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "常见错误" } }
+      }
+    },
+    "exercise.breathing" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Breathing" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "呼吸方法" } }
+      }
     }
   },
   "version" : "1.0"

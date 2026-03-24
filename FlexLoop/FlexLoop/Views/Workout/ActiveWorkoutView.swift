@@ -89,6 +89,17 @@ struct ActiveWorkoutView: View {
                     Text(exercise.name).tag(exercise.serverId as Int?)
                 }
             }
+
+            if let id = selectedExerciseId,
+               let exercise = exercises.first(where: { $0.serverId == id }) {
+                NavigationLink {
+                    ExerciseDetailView(exerciseId: id, exerciseName: exercise.name)
+                } label: {
+                    Label(String(localized: "exercise.howToPerform"), systemImage: "info.circle")
+                        .font(.subheadline)
+                        .foregroundStyle(.blue)
+                }
+            }
         }
     }
 
