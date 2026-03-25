@@ -25,11 +25,22 @@ struct PlanView: View {
                 } else if let plan = viewModel.plan, let days = plan.days, !days.isEmpty {
                     planContent(plan: plan, days: days)
                 } else if let error = viewModel.errorMessage {
-                    ContentUnavailableView(
-                        "Could not load plan",
-                        systemImage: "exclamationmark.triangle",
-                        description: Text(error)
-                    )
+                    ContentUnavailableView {
+                        Label("Could not load plan", systemImage: "exclamationmark.triangle")
+                    } description: {
+                        Text(error)
+                    } actions: {
+                        Button {
+                            viewModel.errorMessage = nil
+                            Task { await generatePlan() }
+                        } label: {
+                            Text("Try Again")
+                                .font(.headline)
+                                .padding(.horizontal, 24)
+                                .padding(.vertical, 8)
+                        }
+                        .buttonStyle(.borderedProminent)
+                    }
                 } else {
                     emptyState
                 }
