@@ -15,6 +15,8 @@ struct ActiveWorkoutView: View {
     @Environment(\.dismiss) private var dismiss
     @State private var viewModel = ActiveWorkoutViewModel()
 
+    var templateExercises: [[String: AnyCodableValue]]?
+
     @State private var currentWeight: Double?
     @State private var currentReps: Int?
     @State private var currentRPE: Double?
@@ -22,6 +24,7 @@ struct ActiveWorkoutView: View {
     @State private var selectedExerciseId: Int?
     @State private var warmupSets: [WarmupSet] = []
     @State private var isLoadingWarmup = false
+    @State private var templateQueue: [(exerciseId: Int, sets: Int, reps: Int, weight: Double?)] = []
 
     @Query(sort: \CachedExercise.name) private var exercises: [CachedExercise]
 
@@ -38,8 +41,9 @@ struct ActiveWorkoutView: View {
                 List {
                     exerciseSection
                     if selectedExerciseId != nil {
-                        if !warmupSets.isEmpty { warmupSection }
                         logSetSection
+                        warmupButtonSection
+                        if !warmupSets.isEmpty { warmupSection }
                     }
                     if !viewModel.loggedSets.isEmpty { completedSetsSection }
                 }
@@ -61,6 +65,20 @@ struct ActiveWorkoutView: View {
                 if viewModel.currentSession == nil {
                     viewModel.startWorkout(context: context)
                 }
+                if templateQueue.isEmpty, let tmpl = templateExercises {
+                    templateQueue = tmpl.compactMap { entry in
+                        guard let id = entry["exercise_id"]?.intValue else { return nil }
+                        let sets = entry["sets"]?.intValue ?? 3
+                        let reps = entry["reps"]?.intValue ?? 8
+                        let weight = entry["weight_kg"]?.doubleValue ?? entry["weight"]?.doubleValue
+                        return (exerciseId: id, sets: sets, reps: reps, weight: weight)
+                    }
+                    if let first = templateQueue.first {
+                        selectedExerciseId = first.exerciseId
+                        currentWeight = first.weight
+                        currentReps = first.reps
+                    }
+                }
             }
             .alert(String(localized: "workout.newPR"), isPresented: $viewModel.showPRAlert) {
                 Button(String(localized: "common.ok")) {}
@@ -69,12 +87,8 @@ struct ActiveWorkoutView: View {
                     Text("\(pr.title)\n\(pr.detail)\nPrevious: \(pr.previous, specifier: "%.1f")")
                 }
             }
-            .onChange(of: selectedExerciseId) { _, newId in
-                if let id = newId, let weight = currentWeight, weight > 0 {
-                    Task { await loadWarmup(exerciseId: id, weight: weight) }
-                } else {
-                    warmupSets = []
-                }
+            .onChange(of: selectedExerciseId) { _, _ in
+                warmupSets = []
             }
         }
     }
@@ -147,6 +161,23 @@ struct ActiveWorkoutView: View {
         }
     }
 
+    private var warmupButtonSection: some View {
+        Section {
+            Button {
+                guard let id = selectedExerciseId, let w = currentWeight, w > 20 else { return }
+                Task { await loadWarmup(exerciseId: id, weight: w) }
+            } label: {
+                HStack {
+                    Image(systemName: "flame")
+                    Text(warmupSets.isEmpty
+                         ? String(localized: "workout.generateWarmUp")
+                         : String(localized: "workout.updateWarmUp"))
+                }
+            }
+            .disabled(selectedExerciseId == nil || currentWeight == nil || (currentWeight ?? 0) <= 20)
+        }
+    }
+
     private var logSetSection: some View {
         Section(String(localized: "workout.workingSet")) {
             SetEntryRow(
@@ -175,14 +206,8 @@ struct ActiveWorkoutView: View {
 
                 currentReps = nil
                 currentRPE = nil
-
-                // Load warmup if first set and weight just entered
-                if viewModel.loggedSets.count == 1, let w = currentWeight, w > 20,
-                   warmupSets.isEmpty, let id = selectedExerciseId {
-                    Task { await loadWarmup(exerciseId: id, weight: w) }
-                }
             }
-            .disabled(currentWeight == nil && currentReps == nil)
+            .disabled(currentWeight == nil || currentReps == nil)
         }
     }
 

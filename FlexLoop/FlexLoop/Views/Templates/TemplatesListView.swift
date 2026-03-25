@@ -5,6 +5,7 @@ struct TemplatesListView: View {
     @Query private var users: [CachedUser]
     @State private var viewModel = TemplatesViewModel()
     @State private var showCreateSheet = false
+    @State private var selectedTemplate: APITemplate?
 
     var body: some View {
         NavigationStack {
@@ -39,6 +40,9 @@ struct TemplatesListView: View {
             .sheet(isPresented: $showCreateSheet) {
                 CreateTemplateView(viewModel: viewModel)
             }
+            .fullScreenCover(item: $selectedTemplate) { template in
+                ActiveWorkoutView(templateExercises: template.exercisesJson)
+            }
             .task {
                 guard let user = users.first else { return }
                 let apiClient = APIClient(config: .current)
@@ -59,7 +63,6 @@ struct TemplatesListView: View {
                         .font(.caption)
                         .foregroundStyle(.secondary)
 
-                    // Show exercise names
                     let names = template.exercisesJson.compactMap {
                         $0["exercise_name"]?.stringValue
                     }
@@ -69,6 +72,18 @@ struct TemplatesListView: View {
                             .foregroundStyle(.tertiary)
                             .lineLimit(1)
                     }
+
+                    Button {
+                        selectedTemplate = template
+                    } label: {
+                        Label("Start Workout", systemImage: "play.fill")
+                            .font(.caption.bold())
+                            .foregroundStyle(.white)
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .tint(.blue)
+                    .controlSize(.small)
+                    .padding(.top, 4)
                 }
                 .swipeActions(edge: .trailing) {
                     Button(role: .destructive) {

@@ -20,7 +20,7 @@ struct ContentView: View {
         TabView {
             HomeView()
                 .tabItem { Label(String(localized: "tab.home"), systemImage: "house") }
-            ActiveWorkoutView()
+            WorkoutTabView()
                 .tabItem { Label(String(localized: "tab.workout"), systemImage: "figure.strengthtraining.traditional") }
             PlanView()
                 .tabItem { Label(String(localized: "tab.plan"), systemImage: "calendar") }

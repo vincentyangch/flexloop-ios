@@ -200,7 +200,7 @@ struct AIChatResponse: Codable, Sendable {
 
 // MARK: - Templates
 
-struct APITemplate: Codable, Sendable, Identifiable {
+struct APITemplate: Codable, Sendable, Identifiable, Hashable {
     let id: Int
     let userId: Int
     let name: String
@@ -238,7 +238,7 @@ struct APITemplateUpdate: Codable, Sendable {
 }
 
 /// A simple type-erased Codable value for template exercise JSON
-enum AnyCodableValue: Codable, Sendable {
+enum AnyCodableValue: Codable, Sendable, Equatable, Hashable {
     case string(String)
     case int(Int)
     case double(Double)
@@ -266,6 +266,12 @@ enum AnyCodableValue: Codable, Sendable {
     var intValue: Int? {
         if case .int(let v) = self { return v }
         if case .double(let v) = self { return Int(v) }
+        return nil
+    }
+
+    var doubleValue: Double? {
+        if case .double(let v) = self { return v }
+        if case .int(let v) = self { return Double(v) }
         return nil
     }
 
