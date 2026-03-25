@@ -55,9 +55,20 @@ enum WeightUnit: String {
         }
     }
 
+    /// Convert kg to display unit, rounded to nearest practical increment for equipment
+    func fromKgRounded(_ kg: Double, equipment: String = "barbell") -> Double {
+        roundToNearest(fromKg(kg), equipment: equipment)
+    }
+
     /// Format weight for display
     func formatWeight(_ kg: Double) -> String {
         let value = fromKg(kg)
+        return "\(String(format: "%.1f", value)) \(symbol)"
+    }
+
+    /// Format weight rounded to equipment increment
+    func formatWeightRounded(_ kg: Double, equipment: String = "barbell") -> String {
+        let value = fromKgRounded(kg, equipment: equipment)
         return "\(String(format: "%.1f", value)) \(symbol)"
     }
 

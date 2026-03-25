@@ -125,7 +125,7 @@ struct ActiveWorkoutView: View {
                     Image(systemName: warmup.completed ? "checkmark.circle.fill" : "circle")
                         .foregroundStyle(warmup.completed ? .green : .secondary)
 
-                    Text("\(unit.fromKg(warmup.weight), specifier: "%.1f") \(unit.symbol)")
+                    Text("\(unit.fromKgRounded(warmup.weight), specifier: "%.1f") \(unit.symbol)")
                         .font(.subheadline.monospacedDigit())
                     Text("x \(warmup.reps)")
                         .font(.subheadline)
@@ -221,7 +221,7 @@ struct ActiveWorkoutView: View {
                         .foregroundStyle(set.setType == .warmUp ? .secondary : .primary)
                     Spacer()
                     if let w = set.weight, let r = set.reps {
-                        Text("\(unit.fromKg(w), specifier: "%.1f") x \(r)")
+                        Text("\(unit.fromKgRounded(w), specifier: "%.1f") \(unit.symbol) x \(r)")
                     }
                     if let rpe = set.rpe {
                         Text("RPE \(rpe, specifier: "%.1f")")

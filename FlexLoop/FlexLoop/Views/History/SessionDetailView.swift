@@ -40,7 +40,7 @@ struct SessionDetailView: View {
 
                         if let w = set.weight, let r = set.reps {
                             let unit = WeightUnit.current
-                            Text("\(unit.fromKg(w), specifier: "%.1f")\(unit.symbol) x \(r)")
+                            Text("\(unit.fromKgRounded(w), specifier: "%.1f") \(unit.symbol) x \(r)")
                                 .font(.subheadline.monospacedDigit())
                         }
 

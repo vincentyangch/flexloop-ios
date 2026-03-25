@@ -12,7 +12,7 @@ struct E1RMChartCard: View {
                     .font(.headline)
                 Spacer()
                 if let latest = exercise.points.last {
-                    Text("\(unit.fromKg(latest.value), specifier: "%.1f") \(unit.symbol)")
+                    Text("\(unit.fromKgRounded(latest.value), specifier: "%.1f") \(unit.symbol)")
                         .font(.subheadline.bold())
                         .foregroundStyle(.blue)
                 }
@@ -27,14 +27,14 @@ struct E1RMChartCard: View {
             Chart(exercise.points) { point in
                 LineMark(
                     x: .value("Date", point.date),
-                    y: .value("Est. 1RM", unit.fromKg(point.value))
+                    y: .value("Est. 1RM", unit.fromKgRounded(point.value))
                 )
                 .foregroundStyle(.blue)
                 .interpolationMethod(.catmullRom)
 
                 PointMark(
                     x: .value("Date", point.date),
-                    y: .value("Est. 1RM", unit.fromKg(point.value))
+                    y: .value("Est. 1RM", unit.fromKgRounded(point.value))
                 )
                 .foregroundStyle(.blue)
                 .symbolSize(30)
@@ -59,7 +59,7 @@ struct E1RMChartCard: View {
               let first = exercise.points.first,
               let last = exercise.points.last else { return nil }
 
-        let diff = unit.fromKg(last.value) - unit.fromKg(first.value)
+        let diff = unit.fromKgRounded(last.value) - unit.fromKgRounded(first.value)
         let sign = diff >= 0 ? "+" : ""
         return "\(sign)\(String(format: "%.1f", diff)) \(unit.symbol) over \(exercise.points.count) sessions"
     }

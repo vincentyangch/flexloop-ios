@@ -58,7 +58,7 @@ struct SetEntryRow: View {
                         .foregroundStyle(.secondary)
                 }
                 if let prev = previousWeight {
-                    Text("\(unit.fromKg(prev), specifier: "%.1f")")
+                    Text("\(unit.fromKgRounded(prev), specifier: "%.1f")")
                         .font(.caption2)
                         .foregroundStyle(.secondary)
                 }
