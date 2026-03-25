@@ -7,17 +7,17 @@ struct ExerciseDetailView: View {
 
     var body: some View {
         Group {
-            if viewModel.isLoading {
-                SwiftUI.ProgressView(String(localized: "common.loading"))
-            } else if let detail = viewModel.detail {
+            if let detail = viewModel.detail {
                 detailContent(detail)
             } else if let error = viewModel.errorMessage {
                 ContentUnavailableView(error, systemImage: "exclamationmark.triangle")
+            } else {
+                SwiftUI.ProgressView(String(localized: "common.loading"))
             }
         }
         .navigationTitle(exerciseName)
         .navigationBarTitleDisplayMode(.inline)
-        .task {
+        .task(id: exerciseId) {
             let apiClient = APIClient(config: .current)
             await viewModel.loadExercise(apiClient: apiClient, exerciseId: exerciseId)
         }
