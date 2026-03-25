@@ -45,7 +45,7 @@ struct PlanView: View {
                     emptyState
                 }
             }
-            .navigationTitle("My Plan")
+            .navigationTitle(String(localized: "plan.title"))
             .toolbar {
                 if viewModel.plan != nil {
                     ToolbarItem(placement: .primaryAction) {

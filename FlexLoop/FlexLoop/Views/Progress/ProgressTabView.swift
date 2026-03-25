@@ -11,9 +11,9 @@ struct ProgressTabView: View {
         NavigationStack {
             VStack(spacing: 0) {
                 Picker("View", selection: $selectedTab) {
-                    Text("Strength").tag(0)
-                    Text("Volume").tag(1)
-                    Text("History").tag(2)
+                    Text(String(localized: "progress.strength")).tag(0)
+                    Text(String(localized: "progress.volume")).tag(1)
+                    Text(String(localized: "progress.history")).tag(2)
                 }
                 .pickerStyle(.segmented)
                 .padding()
@@ -25,7 +25,7 @@ struct ProgressTabView: View {
                 default: EmptyView()
                 }
             }
-            .navigationTitle("Progress")
+            .navigationTitle(String(localized: "progress.title"))
             .task {
                 guard let user = users.first else { return }
                 let apiClient = APIClient(config: .current)
