@@ -12,8 +12,9 @@ struct CreateTemplateView: View {
     @State private var selectedExerciseId: Int?
     @State private var sets = 3
     @State private var reps = 10
-    @State private var weight: Double?
+    @State private var displayWeight: Double?  // in user's unit
     @State private var isSaving = false
+    private let unit = WeightUnit.current
 
     var body: some View {
         NavigationStack {
@@ -65,10 +66,13 @@ struct CreateTemplateView: View {
         HStack {
             Text("Weight (optional)")
             Spacer()
-            TextField("kg", value: $weight, format: .number)
+            TextField(unit.symbol, value: $displayWeight, format: .number)
                 .keyboardType(.decimalPad)
-                .frame(width: 80)
+                .frame(width: 64)
                 .multilineTextAlignment(.trailing)
+            Text(unit.symbol)
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
         }
     }
 
@@ -90,19 +94,24 @@ struct CreateTemplateView: View {
 
     private func entryDetail(_ entry: TemplateExerciseEntry) -> String {
         var text = "\(entry.sets)x\(entry.reps)"
-        if let w = entry.weight { text += " @ \(String(format: "%.1f", w))kg" }
+        if let w = entry.weight {
+            let display = unit.fromKg(w)
+            text += " @ \(String(format: "%.1f", display)) \(unit.symbol)"
+        }
         return text
     }
 
     private func addExercise() {
         guard let exerciseId = selectedExerciseId,
               let exercise = exercises.first(where: { $0.serverId == exerciseId }) else { return }
+        // Convert display weight to kg for storage
+        let weightKg = displayWeight.map { unit.toKg($0) }
         entries.append(TemplateExerciseEntry(
             exerciseId: exerciseId, exerciseName: exercise.name,
-            sets: sets, reps: reps, weight: weight
+            sets: sets, reps: reps, weight: weightKg
         ))
         selectedExerciseId = nil
-        weight = nil
+        displayWeight = nil
     }
 
     private func saveTemplate() async {

@@ -68,4 +68,50 @@ enum WeightUnit: String {
         case .imperial: return 5.0
         }
     }
+
+    // MARK: - Equipment-aware increments and minimums
+
+    /// Smallest plate increment (both sides of a barbell = 2 plates)
+    /// Metric: 2.5kg plates → 5kg per step. Imperial: 5lb plates → 10lb per step.
+    var barbellIncrement: Double {
+        switch self {
+        case .metric: return 5.0    // 2x 2.5kg plates
+        case .imperial: return 10.0  // 2x 5lb plates
+        }
+    }
+
+    /// Barbell bar weight
+    var barbellMinimum: Double {
+        switch self {
+        case .metric: return 20.0   // standard Olympic bar
+        case .imperial: return 45.0
+        }
+    }
+
+    /// Dumbbell increment (single weight)
+    var dumbbellIncrement: Double {
+        switch self {
+        case .metric: return 2.5
+        case .imperial: return 5.0
+        }
+    }
+
+    /// Round a display-unit value to the nearest valid weight for the given equipment
+    func roundToNearest(_ value: Double, equipment: String) -> Double {
+        let inc: Double
+        let minimum: Double
+        switch equipment.lowercased() {
+        case "barbell":
+            inc = barbellIncrement
+            minimum = barbellMinimum
+        case "dumbbell", "dumbbells":
+            inc = dumbbellIncrement
+            minimum = inc
+        default:
+            inc = increment
+            minimum = inc
+        }
+        let rounded = (value / inc).rounded() * inc
+        return max(rounded, minimum)
+    }
 }
