@@ -4,6 +4,7 @@ import SwiftData
 struct PlanView: View {
     @Query private var users: [CachedUser]
     @State private var viewModel = PlanViewModel()
+    @State private var selectedDayExercises: [[String: AnyCodableValue]]?
 
     private var todayDayOfWeek: Int {
         let weekday = Calendar.current.component(.weekday, from: Date())
@@ -46,6 +47,14 @@ struct PlanView: View {
                 }
             }
             .navigationTitle(String(localized: "plan.title"))
+            .fullScreenCover(isPresented: Binding(
+                get: { selectedDayExercises != nil },
+                set: { if !$0 { selectedDayExercises = nil } }
+            )) {
+                if let exercises = selectedDayExercises {
+                    ActiveWorkoutView(templateExercises: exercises)
+                }
+            }
             .toolbar {
                 if viewModel.plan != nil {
                     ToolbarItem(placement: .primaryAction) {
@@ -89,7 +98,10 @@ struct PlanView: View {
                     PlanDayCard(
                         day: day,
                         isToday: day.dayNumber == todayDayOfWeek,
-                        exerciseName: viewModel.exerciseName
+                        exerciseName: { viewModel.exerciseName(for: $0) },
+                        onStartWorkout: {
+                            selectedDayExercises = exercisesFromPlanDay(day)
+                        }
                     )
                     .padding(.horizontal)
                 }
@@ -113,6 +125,21 @@ struct PlanView: View {
                     .padding(.vertical, 8)
             }
             .buttonStyle(.borderedProminent)
+        }
+    }
+
+    private func exercisesFromPlanDay(_ day: APIPlanDay) -> [[String: AnyCodableValue]] {
+        day.exerciseGroups.flatMap { group in
+            group.exercises.map { ex in
+                var dict: [String: AnyCodableValue] = [
+                    "exercise_id": .int(ex.exerciseId),
+                    "exercise_name": .string(viewModel.exerciseName(for: ex.exerciseId)),
+                    "sets": .int(ex.sets),
+                    "reps": .int(ex.reps),
+                ]
+                if let w = ex.weight { dict["weight_kg"] = .double(w) }
+                return dict
+            }
         }
     }
 

@@ -4,6 +4,7 @@ struct PlanDayCard: View {
     let day: APIPlanDay
     let isToday: Bool
     let exerciseName: (Int) -> String
+    var onStartWorkout: (() -> Void)?
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -66,6 +67,20 @@ struct PlanDayCard: View {
                         }
                     }
                 }
+            }
+
+            if let onStart = onStartWorkout {
+                Button {
+                    onStart()
+                } label: {
+                    Label(String(localized: "home.startWorkout"), systemImage: "play.fill")
+                        .font(.caption.bold())
+                        .foregroundStyle(.white)
+                }
+                .buttonStyle(.borderedProminent)
+                .tint(.blue)
+                .controlSize(.small)
+                .padding(.top, 4)
             }
         }
         .padding()
