@@ -17,7 +17,7 @@ struct PlanExerciseEditView: View {
             _setTargets = State(initialValue: setsJson.map { target in
                 EditableSetTarget(
                     setNumber: target.setNumber,
-                    targetWeightDisplay: target.targetWeightKg.map { u.fromKg($0) },
+                    targetWeightDisplay: target.targetWeightKg.map { u.fromKgRounded($0) },
                     targetReps: target.targetReps,
                     targetRpe: target.targetRpe
                 )
@@ -26,7 +26,7 @@ struct PlanExerciseEditView: View {
             let defaults = (1...exercise.wrappedValue.sets).map { num in
                 EditableSetTarget(
                     setNumber: num,
-                    targetWeightDisplay: exercise.wrappedValue.weight.map { u.fromKg($0) },
+                    targetWeightDisplay: exercise.wrappedValue.weight.map { u.fromKgRounded($0) },
                     targetReps: exercise.wrappedValue.reps,
                     targetRpe: exercise.wrappedValue.rpeTarget
                 )

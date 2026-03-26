@@ -342,7 +342,7 @@ struct GuidedSetRow: View {
         self.onEdit = onEdit
         let u = WeightUnit.current
         let weightKg = completedSet?.weightKg ?? targetWeightKg
-        _editWeightDisplay = State(initialValue: weightKg.map { u.fromKg($0) })
+        _editWeightDisplay = State(initialValue: weightKg.map { u.fromKgRounded($0) })
         _editReps = State(initialValue: completedSet?.reps ?? targetReps)
         _editRpe = State(initialValue: completedSet?.rpe ?? targetRpe)
     }
