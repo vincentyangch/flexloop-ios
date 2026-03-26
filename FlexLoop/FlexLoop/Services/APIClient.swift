@@ -125,16 +125,36 @@ actor APIClient {
         try await post("/api/ai/chat", body: request)
     }
 
-    func fetchTemplates(userId: Int) async throws -> [APITemplate] {
-        try await get("/api/templates", queryItems: [.init(name: "user_id", value: "\(userId)")])
+    // MARK: - Plans
+
+    func fetchPlans(userId: Int, status: String? = nil) async throws -> APIPlanListResponse {
+        var queryItems: [URLQueryItem] = [.init(name: "user_id", value: "\(userId)")]
+        if let status { queryItems.append(.init(name: "status", value: status)) }
+        return try await get("/api/plans", queryItems: queryItems)
     }
 
-    func createTemplate(data: APITemplateCreate) async throws -> APITemplate {
-        try await post("/api/templates", body: data)
+    func fetchPlan(id: Int) async throws -> APIPlanResponse {
+        try await get("/api/plans/\(id)")
     }
 
-    func deleteTemplate(id: Int) async throws {
-        guard let url = buildURL(path: "/api/templates/\(id)") else { throw APIError.invalidURL }
+    func createPlan(data: APIPlanCreate) async throws -> APIPlanResponse {
+        try await post("/api/plans", body: data)
+    }
+
+    func updatePlan(id: Int, data: APIPlanUpdate) async throws -> APIPlanResponse {
+        try await put("/api/plans/\(id)", body: data)
+    }
+
+    func activatePlan(id: Int) async throws -> APIPlanResponse {
+        try await put("/api/plans/\(id)/activate", body: EmptyBody())
+    }
+
+    func archivePlan(id: Int) async throws -> APIPlanResponse {
+        try await put("/api/plans/\(id)/archive", body: EmptyBody())
+    }
+
+    func deletePlan(id: Int) async throws {
+        guard let url = buildURL(path: "/api/plans/\(id)") else { throw APIError.invalidURL }
         var request = URLRequest(url: url)
         request.httpMethod = "DELETE"
         let (_, response) = try await session.data(for: request)
@@ -144,6 +164,24 @@ actor APIClient {
     func generatePlan(userId: Int) async throws -> APIPlanGenerateResponse {
         try await post("/api/ai/plan/generate", body: APIPlanGenerateRequest(userId: userId))
     }
+
+    // MARK: - Cycle Tracker
+
+    func fetchNextWorkout(userId: Int) async throws -> APINextWorkoutResponse {
+        try await get("/api/users/\(userId)/next-workout")
+    }
+
+    func completeWorkout(userId: Int) async throws -> APICompleteWorkoutResponse {
+        try await post("/api/users/\(userId)/complete-workout", body: EmptyBody())
+    }
+
+    // MARK: - Set Editing
+
+    func updateWorkoutSet(workoutId: Int, setId: Int, data: APIWorkoutSetUpdate) async throws -> APIWorkoutSetUpdateResponse {
+        try await put("/api/workouts/\(workoutId)/sets/\(setId)", body: data)
+    }
+
+    // MARK: - Health
 
     func checkHealth() async throws -> APIHealthResponse {
         try await get("/api/health")
@@ -159,3 +197,5 @@ actor APIClient {
         }
     }
 }
+
+struct EmptyBody: Codable, Sendable {}

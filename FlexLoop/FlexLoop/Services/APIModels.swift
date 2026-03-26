@@ -95,7 +95,6 @@ struct APIWorkoutSession: Codable, Identifiable, Sendable {
     let id: Int
     let userId: Int
     let planDayId: Int?
-    let templateId: Int?
     let source: String
     let startedAt: String
     let completedAt: String?
@@ -106,7 +105,6 @@ struct APIWorkoutSession: Codable, Identifiable, Sendable {
         case id, source, notes, sets
         case userId = "user_id"
         case planDayId = "plan_day_id"
-        case templateId = "template_id"
         case startedAt = "started_at"
         case completedAt = "completed_at"
     }
@@ -126,7 +124,6 @@ struct APISyncRequest: Codable, Sendable {
 
 struct APISyncWorkout: Codable, Sendable {
     let planDayId: Int?
-    let templateId: Int?
     let source: String
     let startedAt: String
     let completedAt: String?
@@ -136,7 +133,6 @@ struct APISyncWorkout: Codable, Sendable {
     enum CodingKeys: String, CodingKey {
         case source, notes, sets
         case planDayId = "plan_day_id"
-        case templateId = "template_id"
         case startedAt = "started_at"
         case completedAt = "completed_at"
     }
@@ -198,89 +194,6 @@ struct AIChatResponse: Codable, Sendable {
     }
 }
 
-// MARK: - Templates
-
-struct APITemplate: Codable, Sendable, Identifiable, Hashable {
-    let id: Int
-    let userId: Int
-    let name: String
-    let exercisesJson: [[String: AnyCodableValue]]
-    let createdAt: String
-
-    enum CodingKeys: String, CodingKey {
-        case id, name
-        case userId = "user_id"
-        case exercisesJson = "exercises_json"
-        case createdAt = "created_at"
-    }
-}
-
-struct APITemplateCreate: Codable, Sendable {
-    let userId: Int
-    let name: String
-    let exercisesJson: [[String: AnyCodableValue]]
-
-    enum CodingKeys: String, CodingKey {
-        case name
-        case userId = "user_id"
-        case exercisesJson = "exercises_json"
-    }
-}
-
-struct APITemplateUpdate: Codable, Sendable {
-    let name: String?
-    let exercisesJson: [[String: AnyCodableValue]]?
-
-    enum CodingKeys: String, CodingKey {
-        case name
-        case exercisesJson = "exercises_json"
-    }
-}
-
-/// A simple type-erased Codable value for template exercise JSON
-enum AnyCodableValue: Codable, Sendable, Equatable, Hashable {
-    case string(String)
-    case int(Int)
-    case double(Double)
-    case bool(Bool)
-
-    init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let v = try? container.decode(Int.self) { self = .int(v) }
-        else if let v = try? container.decode(Double.self) { self = .double(v) }
-        else if let v = try? container.decode(Bool.self) { self = .bool(v) }
-        else if let v = try? container.decode(String.self) { self = .string(v) }
-        else { self = .string("") }
-    }
-
-    func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .string(let v): try container.encode(v)
-        case .int(let v): try container.encode(v)
-        case .double(let v): try container.encode(v)
-        case .bool(let v): try container.encode(v)
-        }
-    }
-
-    var intValue: Int? {
-        if case .int(let v) = self { return v }
-        if case .double(let v) = self { return Int(v) }
-        return nil
-    }
-
-    var doubleValue: Double? {
-        if case .double(let v) = self { return v }
-        if case .int(let v) = self { return Double(v) }
-        return nil
-    }
-
-    var stringValue: String? {
-        if case .string(let v) = self { return v }
-        return nil
-    }
-}
-
 // MARK: - Plan
 
 struct APIPlanGenerateRequest: Codable, Sendable {
@@ -291,38 +204,115 @@ struct APIPlanGenerateRequest: Codable, Sendable {
     }
 }
 
-struct APIPlanExercise: Codable, Sendable {
-    let exerciseId: Int
-    let sets: Int
-    let reps: Int
-    let weight: Double?
-    let rpeTarget: Double?
-    let notes: String?
+struct APISetTarget: Codable, Sendable {
+    var setNumber: Int
+    var targetWeightKg: Double?
+    var targetReps: Int
+    var targetRpe: Double?
 
     enum CodingKeys: String, CodingKey {
-        case sets, reps, weight, notes
-        case exerciseId = "exercise_id"
-        case rpeTarget = "rpe_target"
+        case setNumber = "set_number"
+        case targetWeightKg = "target_weight_kg"
+        case targetReps = "target_reps"
+        case targetRpe = "target_rpe"
     }
 }
 
-struct APIPlanExerciseGroup: Codable, Sendable {
+struct APIPlanExercise: Codable, Sendable, Identifiable {
+    let id: Int?
+    let exerciseId: Int
+    var order: Int
+    var sets: Int
+    var reps: Int
+    var weight: Double?
+    var rpeTarget: Double?
+    var setsJson: [APISetTarget]?
+    var notes: String?
+
+    enum CodingKeys: String, CodingKey {
+        case id, order, sets, reps, weight, notes
+        case exerciseId = "exercise_id"
+        case rpeTarget = "rpe_target"
+        case setsJson = "sets_json"
+    }
+}
+
+struct APIPlanExerciseGroup: Codable, Sendable, Identifiable {
+    let id: Int?
     let groupType: String
+    let order: Int
     let restAfterGroupSec: Int
     let exercises: [APIPlanExercise]
 
     enum CodingKeys: String, CodingKey {
-        case exercises
+        case id, order, exercises
         case groupType = "group_type"
         case restAfterGroupSec = "rest_after_group_sec"
     }
 }
 
-struct APIPlanDay: Codable, Sendable {
+struct APIPlanDay: Codable, Sendable, Identifiable {
+    let id: Int?
+    let dayNumber: Int
+    var label: String
+    var focus: String
+    let exerciseGroups: [APIPlanExerciseGroup]
+
+    enum CodingKeys: String, CodingKey {
+        case id, label, focus
+        case dayNumber = "day_number"
+        case exerciseGroups = "exercise_groups"
+    }
+}
+
+struct APIPlanResponse: Codable, Sendable, Identifiable {
+    let id: Int
+    let userId: Int
+    let name: String
+    let splitType: String
+    let cycleLength: Int
+    let status: String
+    let aiGenerated: Bool
+    let createdAt: String
+    let updatedAt: String?
+    let days: [APIPlanDay]
+
+    enum CodingKeys: String, CodingKey {
+        case id, name, status, days
+        case userId = "user_id"
+        case splitType = "split_type"
+        case cycleLength = "cycle_length"
+        case aiGenerated = "ai_generated"
+        case createdAt = "created_at"
+        case updatedAt = "updated_at"
+    }
+}
+
+struct APIPlanListResponse: Codable, Sendable {
+    let plans: [APIPlanResponse]
+    let total: Int
+}
+
+struct APIPlanCreate: Codable, Sendable {
+    let userId: Int
+    let name: String
+    let splitType: String
+    let cycleLength: Int
+    let days: [APIPlanDayCreate]
+
+    enum CodingKeys: String, CodingKey {
+        case name, days
+        case userId = "user_id"
+        case splitType = "split_type"
+        case cycleLength = "cycle_length"
+    }
+}
+
+struct APIPlanDayCreate: Codable, Sendable {
     let dayNumber: Int
     let label: String
     let focus: String
-    let exerciseGroups: [APIPlanExerciseGroup]
+    let exerciseGroups: [APIPlanExerciseGroupCreate]
 
     enum CodingKeys: String, CodingKey {
         case label, focus
@@ -331,13 +321,56 @@ struct APIPlanDay: Codable, Sendable {
     }
 }
 
+struct APIPlanExerciseGroupCreate: Codable, Sendable {
+    let groupType: String
+    let order: Int
+    let restAfterGroupSec: Int
+    let exercises: [APIPlanExerciseCreate]
+
+    enum CodingKeys: String, CodingKey {
+        case order, exercises
+        case groupType = "group_type"
+        case restAfterGroupSec = "rest_after_group_sec"
+    }
+}
+
+struct APIPlanExerciseCreate: Codable, Sendable {
+    let exerciseId: Int
+    let order: Int
+    let sets: Int
+    let reps: Int
+    let weight: Double?
+    let rpeTarget: Double?
+    let setsJson: [APISetTarget]?
+    let notes: String?
+
+    enum CodingKeys: String, CodingKey {
+        case order, sets, reps, weight, notes
+        case exerciseId = "exercise_id"
+        case rpeTarget = "rpe_target"
+        case setsJson = "sets_json"
+    }
+}
+
+struct APIPlanUpdate: Codable, Sendable {
+    let name: String?
+    let splitType: String?
+    let cycleLength: Int?
+    let days: [APIPlanDayCreate]?
+
+    enum CodingKeys: String, CodingKey {
+        case name, days
+        case splitType = "split_type"
+        case cycleLength = "cycle_length"
+    }
+}
+
 struct APIPlanGenerateResponse: Codable, Sendable {
     let status: String
     let planId: Int?
     let planName: String?
     let splitType: String?
-    let blockStart: String?
-    let blockEnd: String?
+    let cycleLength: Int?
     let days: [APIPlanDay]?
     let inputTokens: Int?
     let outputTokens: Int?
@@ -349,12 +382,56 @@ struct APIPlanGenerateResponse: Codable, Sendable {
         case planId = "plan_id"
         case planName = "plan_name"
         case splitType = "split_type"
-        case blockStart = "block_start"
-        case blockEnd = "block_end"
+        case cycleLength = "cycle_length"
         case inputTokens = "input_tokens"
         case outputTokens = "output_tokens"
         case rawResponse = "raw_response"
     }
+}
+
+// MARK: - Cycle Tracker
+
+struct APINextWorkoutResponse: Codable, Sendable {
+    let planId: Int
+    let planName: String
+    let cycleLength: Int
+    let nextDayNumber: Int
+    let lastCompletedAt: String?
+    let day: APIPlanDay
+
+    enum CodingKeys: String, CodingKey {
+        case day
+        case planId = "plan_id"
+        case planName = "plan_name"
+        case cycleLength = "cycle_length"
+        case nextDayNumber = "next_day_number"
+        case lastCompletedAt = "last_completed_at"
+    }
+}
+
+struct APICompleteWorkoutResponse: Codable, Sendable {
+    let completedDayNumber: Int
+    let nextDayNumber: Int
+    let cycleLength: Int
+
+    enum CodingKeys: String, CodingKey {
+        case cycleLength = "cycle_length"
+        case completedDayNumber = "completed_day_number"
+        case nextDayNumber = "next_day_number"
+    }
+}
+
+struct APIWorkoutSetUpdate: Codable, Sendable {
+    let weight: Double?
+    let reps: Int?
+    let rpe: Double?
+}
+
+struct APIWorkoutSetUpdateResponse: Codable, Sendable {
+    let id: Int
+    let weight: Double?
+    let reps: Int?
+    let rpe: Double?
 }
 
 // MARK: - Health

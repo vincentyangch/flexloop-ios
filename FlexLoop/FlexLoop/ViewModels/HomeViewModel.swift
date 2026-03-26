@@ -16,6 +16,28 @@ final class HomeViewModel {
     var isLoading = false
     var deloadAlert: DeloadAlert?
 
+    // Next workout from cycle tracker
+    var nextWorkout: APINextWorkoutResponse?
+    var exerciseNames: [Int: String] = [:]
+    var nextWorkoutError: String?
+
+    func loadNextWorkout(apiClient: APIClient, userId: Int) async {
+        do {
+            nextWorkout = try await apiClient.fetchNextWorkout(userId: userId)
+
+            // Load exercise names if needed
+            if exerciseNames.isEmpty {
+                let exerciseList = try await apiClient.fetchExercises()
+                for ex in exerciseList.exercises {
+                    exerciseNames[ex.id] = ex.name
+                }
+            }
+        } catch {
+            nextWorkoutError = nil // Not having a next workout is fine (no plan yet)
+            nextWorkout = nil
+        }
+    }
+
     func loadDashboard(context: ModelContext) {
         let descriptor = FetchDescriptor<CachedWorkoutSession>(
             sortBy: [SortDescriptor(\.startedAt, order: .reverse)]

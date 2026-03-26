@@ -31,7 +31,6 @@ struct SyncService {
 
             return APISyncWorkout(
                 planDayId: session.planDayId,
-                templateId: session.templateId,
                 source: session.source.rawValue,
                 startedAt: formatter.string(from: session.startedAt),
                 completedAt: session.completedAt.map { formatter.string(from: $0) },

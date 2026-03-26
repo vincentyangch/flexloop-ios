@@ -161,18 +161,66 @@
         }
       }
     },
-    "home.myTemplates": {
+    "home.nextWorkout": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "My Templates"
+            "value": "Next Workout"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "我的模板"
+            "value": "下次训练"
+          }
+        }
+      }
+    },
+    "home.noPlan": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No active plan"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "暂无训练计划"
+          }
+        }
+      }
+    },
+    "home.noPlan.hint": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Go to the Plan tab to generate one with AI."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "前往计划页面使用AI生成训练计划。"
+          }
+        }
+      }
+    },
+    "home.moreExercises %lld": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "+%lld more"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "还有%lld个动作"
           }
         }
       }
@@ -1089,100 +1137,274 @@
         }
       }
     },
-    "templates.title": {
+    "plan.active": {
       "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Templates"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "模板"
-          }
-        }
+        "en": { "stringUnit": { "state": "translated", "value": "Active Plan" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "当前计划" } }
       }
     },
-    "templates.noTemplates": {
+    "plan.archived": {
       "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "No Templates"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "暂无模板"
-          }
-        }
+        "en": { "stringUnit": { "state": "translated", "value": "Archived" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "已归档" } }
       }
     },
-    "templates.createTemplate": {
+    "plan.activate": {
       "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Create Template"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "创建模板"
-          }
-        }
+        "en": { "stringUnit": { "state": "translated", "value": "Activate" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "启用" } }
       }
     },
-    "templates.newTemplate": {
+    "plan.archive": {
       "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "New Template"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "新建模板"
-          }
-        }
+        "en": { "stringUnit": { "state": "translated", "value": "Archive" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "归档" } }
       }
     },
-    "templates.save": {
+    "plan.generate": {
       "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Save"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "保存"
-          }
-        }
+        "en": { "stringUnit": { "state": "translated", "value": "Generate Plan" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "生成计划" } }
       }
     },
-    "templates.exercises %lld": {
+    "plan.generateAI": {
       "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld exercises"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld 个动作"
-          }
-        }
+        "en": { "stringUnit": { "state": "translated", "value": "Generate with AI" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "AI生成" } }
+      }
+    },
+    "plan.aiGenerated": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "AI Generated" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "AI生成" } }
+      }
+    },
+    "plan.loading": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Loading plan..." } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "加载计划中..." } }
+      }
+    },
+    "plan.empty.title": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "No Plans" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "暂无计划" } }
+      }
+    },
+    "plan.empty.description": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Generate a personalized training plan with AI." } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "使用AI生成个性化训练计划。" } }
+      }
+    },
+    "plan.edit.dayInfo": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Day Info" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "训练日信息" } }
+      }
+    },
+    "plan.edit.label": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Label" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "名称" } }
+      }
+    },
+    "plan.edit.focus": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Focus" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "重点" } }
+      }
+    },
+    "plan.edit.exercises": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Exercises" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "动作" } }
+      }
+    },
+    "plan.edit.addExercise": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Add Exercise" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "添加动作" } }
+      }
+    },
+    "plan.edit.searchExercise": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Search exercises" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "搜索动作" } }
+      }
+    },
+    "plan.edit.pickExercise": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Pick Exercise" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "选择动作" } }
+      }
+    },
+    "plan.edit.overview": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Overview" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "概览" } }
+      }
+    },
+    "plan.edit.exerciseName": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Exercise" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "动作" } }
+      }
+    },
+    "plan.edit.sets: %lld": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Sets: %lld" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "组数: %lld" } }
+      }
+    },
+    "plan.edit.defaultReps": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Default Reps" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "默认次数" } }
+      }
+    },
+    "plan.edit.perSetTargets": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Per-Set Targets" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "每组目标" } }
+      }
+    },
+    "plan.edit.weight": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Weight" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "重量" } }
+      }
+    },
+    "plan.edit.reps": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Reps" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "次数" } }
+      }
+    },
+    "plan.edit.notes": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Notes" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "备注" } }
+      }
+    },
+    "plan.edit.notesPlaceholder": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Coaching notes..." } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "训练提示..." } }
+      }
+    },
+    "workout.exercise %lld %lld": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Exercise %lld of %lld" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "第%lld个动作，共%lld个" } }
+      }
+    },
+    "workout.weight": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Weight" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "重量" } }
+      }
+    },
+    "workout.reps": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Reps" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "次数" } }
+      }
+    },
+    "workout.nextExercise": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Next Exercise" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "下一个动作" } }
+      }
+    },
+    "workout.finishWorkout": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Finish Workout" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "完成训练" } }
+      }
+    },
+    "workout.skipExercise": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Skip Exercise" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "跳过动作" } }
+      }
+    },
+    "workout.exerciseList": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Exercise List" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "动作列表" } }
+      }
+    },
+    "workout.current": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "CURRENT" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "当前" } }
+      }
+    },
+    "workout.complete": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Workout Complete!" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "训练完成！" } }
+      }
+    },
+    "workout.summary.title": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Summary" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "训练总结" } }
+      }
+    },
+    "workout.summary.exercises": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Exercises" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "动作数" } }
+      }
+    },
+    "workout.summary.sets": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Total Sets" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "总组数" } }
+      }
+    },
+    "workout.summary.duration": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Duration" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "时长" } }
+      }
+    },
+    "workout.summary.skipped": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Skipped" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "跳过" } }
+      }
+    },
+    "workout.summary.prs": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "New PRs" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "新纪录" } }
+      }
+    },
+    "common.cancel": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Cancel" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "取消" } }
+      }
+    },
+    "common.save": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Save" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "保存" } }
+      }
+    },
+    "common.done": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Done" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "完成" } }
+      }
+    },
+    "common.tryAgain": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Try Again" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "重试" } }
       }
     },
     "history.title": {

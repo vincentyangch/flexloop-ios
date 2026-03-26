@@ -7,22 +7,20 @@ final class CachedPlan {
     var userId: Int
     var name: String
     var splitType: String
-    var blockStart: Date
-    var blockEnd: Date
+    var cycleLength: Int
     var status: String
     var aiGenerated: Bool
     var daysJson: Data?
     var lastSyncedAt: Date?
 
     init(serverId: Int, userId: Int, name: String, splitType: String,
-         blockStart: Date, blockEnd: Date, status: String = "active",
+         cycleLength: Int = 3, status: String = "active",
          aiGenerated: Bool = false, daysJson: Data? = nil) {
         self.serverId = serverId
         self.userId = userId
         self.name = name
         self.splitType = splitType
-        self.blockStart = blockStart
-        self.blockEnd = blockEnd
+        self.cycleLength = cycleLength
         self.status = status
         self.aiGenerated = aiGenerated
         self.daysJson = daysJson
