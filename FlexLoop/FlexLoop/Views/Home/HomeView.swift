@@ -38,8 +38,8 @@ struct HomeView: View {
             .task {
                 guard let user = users.first else { return }
                 let apiClient = APIClient(config: .current)
-                async let _ = viewModel.loadNextWorkout(apiClient: apiClient, userId: user.serverId)
-                async let _ = viewModel.checkDeload(apiClient: apiClient, userId: user.serverId)
+                await viewModel.loadNextWorkout(apiClient: apiClient, userId: user.serverId)
+                await viewModel.checkDeload(apiClient: apiClient, userId: user.serverId)
             }
             .fullScreenCover(isPresented: $showGuidedWorkout) {
                 if let next = viewModel.nextWorkout, let user = users.first {

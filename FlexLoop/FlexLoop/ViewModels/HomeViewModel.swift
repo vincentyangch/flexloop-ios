@@ -33,6 +33,7 @@ final class HomeViewModel {
                 }
             }
         } catch {
+            print("loadNextWorkout error: \(error)")
             nextWorkoutError = nil // Not having a next workout is fine (no plan yet)
             nextWorkout = nil
         }
