@@ -1,40 +1,17 @@
 import Combine
 import Foundation
+import HealthKit
 import WatchConnectivity
-
-// MARK: - Shared data structures (mirrored from iPhone)
-
-struct WatchExerciseData: Codable {
-    let name: String
-    let sets: Int
-    let reps: Int
-    let weight: Double?
-    let rpeTarget: Double?
-    let groupType: String
-    let restSec: Int
-}
-
-struct WatchDayData: Codable {
-    let dayNumber: Int
-    let label: String
-    let focus: String
-    let exercises: [WatchExerciseData]
-}
-
-struct WatchPlanData: Codable {
-    let planName: String
-    let todayDay: WatchDayData?
-    let allDays: [WatchDayData]
-}
-
-// MARK: - Watch-side connectivity manager
 
 class WatchSessionManager: NSObject, ObservableObject, WCSessionDelegate {
     static let shared = WatchSessionManager()
 
-    @Published var todayPlan: WatchDayData?
-    @Published var planName: String = ""
+    @Published var workoutState: WorkoutSyncState?
     @Published var isConnected = false
+
+    private var healthStore = HKHealthStore()
+    private var workoutSession: HKWorkoutSession?
+    private var workoutBuilder: HKLiveWorkoutBuilder?
 
     override init() {
         super.init()
@@ -44,18 +21,83 @@ class WatchSessionManager: NSObject, ObservableObject, WCSessionDelegate {
         }
     }
 
-    private func processPlanData(from dict: [String: Any]) {
-        guard let data = dict["planData"] as? Data else { return }
+    // MARK: - Send to iPhone
+
+    func sendCompleteSet(exerciseIndex: Int, setNumber: Int,
+                         weightKg: Double?, reps: Int?, rpe: Double?) {
+        let action = WatchCompleteSetAction(
+            exerciseIndex: exerciseIndex,
+            setNumber: setNumber,
+            weightKg: weightKg,
+            reps: reps,
+            rpe: rpe
+        )
+        let message = SyncMessageCoder.encode(.completeSet, payload: action)
+
+        print("[WatchSync] Sending completeSet: exercise=\(exerciseIndex) set=\(setNumber)")
+        WCSession.default.sendMessage(message, replyHandler: { [weak self] reply in
+            let type = SyncMessageCoder.decodeType(from: reply)
+            print("[WatchSync] completeSet reply type: \(type?.rawValue ?? "nil")")
+            if let state = SyncMessageCoder.decodePayload(WorkoutSyncState.self, from: reply) {
+                print("[WatchSync] Got state update: exercise=\(state.currentExerciseIndex) sets=\(state.exercises.map { $0.completedSets.count })")
+                DispatchQueue.main.async {
+                    self?.workoutState = state
+                }
+            }
+        }, errorHandler: { error in
+            print("[WatchSync] sendCompleteSet error: \(error)")
+        })
+    }
+
+    func requestState() {
+        guard WCSession.default.isReachable else { return }
+        let message = SyncMessageCoder.encode(.requestState)
+
+        WCSession.default.sendMessage(message, replyHandler: { [weak self] reply in
+            guard let type = SyncMessageCoder.decodeType(from: reply) else { return }
+            if type == .stateUpdate,
+               let state = SyncMessageCoder.decodePayload(WorkoutSyncState.self, from: reply) {
+                DispatchQueue.main.async {
+                    self?.workoutState = state
+                }
+            } else if type == .noActiveWorkout {
+                DispatchQueue.main.async {
+                    self?.workoutState = nil
+                }
+            }
+        }, errorHandler: { error in
+            print("requestState error: \(error)")
+        })
+    }
+
+    // MARK: - HKWorkoutSession
+
+    private func startWorkoutSession() {
+        guard HKHealthStore.isHealthDataAvailable() else { return }
+
+        let config = HKWorkoutConfiguration()
+        config.activityType = .traditionalStrengthTraining
+        config.locationType = .indoor
 
         do {
-            let plan = try JSONDecoder().decode(WatchPlanData.self, from: data)
-            DispatchQueue.main.async {
-                self.planName = plan.planName
-                self.todayPlan = plan.todayDay
-            }
+            workoutSession = try HKWorkoutSession(healthStore: healthStore, configuration: config)
+            workoutBuilder = workoutSession?.associatedWorkoutBuilder()
+            workoutBuilder?.dataSource = HKLiveWorkoutDataSource(healthStore: healthStore, workoutConfiguration: config)
+
+            workoutSession?.startActivity(with: Date())
+            try workoutBuilder?.beginCollection(withStart: Date()) { _, _ in }
         } catch {
-            print("Failed to decode plan data: \(error)")
+            print("Failed to start workout session: \(error)")
         }
+    }
+
+    private func endWorkoutSession() {
+        workoutSession?.end()
+        workoutBuilder?.endCollection(withEnd: Date()) { [weak self] _, _ in
+            self?.workoutBuilder?.finishWorkout { _, _ in }
+        }
+        workoutSession = nil
+        workoutBuilder = nil
     }
 
     // MARK: - WCSessionDelegate
@@ -64,20 +106,40 @@ class WatchSessionManager: NSObject, ObservableObject, WCSessionDelegate {
         DispatchQueue.main.async {
             self.isConnected = activationState == .activated
         }
-
-        // Check for any existing application context
         if !session.receivedApplicationContext.isEmpty {
-            processPlanData(from: session.receivedApplicationContext)
+            handleIncomingMessage(session.receivedApplicationContext)
         }
     }
 
-    // Receive application context (guaranteed delivery)
-    func session(_ session: WCSession, didReceiveApplicationContext applicationContext: [String: Any]) {
-        processPlanData(from: applicationContext)
+    func session(_ session: WCSession, didReceiveMessage message: [String: Any]) {
+        handleIncomingMessage(message)
     }
 
-    // Receive direct message (immediate, if reachable)
-    func session(_ session: WCSession, didReceiveMessage message: [String: Any]) {
-        processPlanData(from: message)
+    func session(_ session: WCSession, didReceiveApplicationContext applicationContext: [String: Any]) {
+        handleIncomingMessage(applicationContext)
+    }
+
+    private func handleIncomingMessage(_ message: [String: Any]) {
+        guard let type = SyncMessageCoder.decodeType(from: message) else { return }
+
+        switch type {
+        case .workoutStarted, .stateUpdate:
+            if let state = SyncMessageCoder.decodePayload(WorkoutSyncState.self, from: message) {
+                DispatchQueue.main.async {
+                    let wasInactive = self.workoutState == nil
+                    self.workoutState = state
+                    if wasInactive && state.isActive {
+                        self.startWorkoutSession()
+                    }
+                }
+            }
+        case .workoutEnded:
+            DispatchQueue.main.async {
+                self.workoutState = nil
+                self.endWorkoutSession()
+            }
+        default:
+            break
+        }
     }
 }

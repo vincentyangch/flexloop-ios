@@ -48,6 +48,7 @@ struct GuidedWorkoutView: View {
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button(String(localized: "workout.cancel")) {
+                        PhoneConnectivityManager.shared.sendWorkoutEnded(reason: "cancelled")
                         dismiss()
                     }
                 }
@@ -86,8 +87,12 @@ struct GuidedWorkoutView: View {
                 }
             }
             .onAppear {
+                PhoneConnectivityManager.shared.activeWorkoutViewModel = viewModel
                 viewModel.userId = userId
                 viewModel.loadFromPlanDay(planDay, exerciseNames: exerciseNames)
+            }
+            .onDisappear {
+                PhoneConnectivityManager.shared.activeWorkoutViewModel = nil
             }
         }
     }
@@ -412,6 +417,21 @@ struct GuidedSetRow: View {
         .padding(.vertical, 4)
         .background(isCompleted ? Color.green.opacity(0.05) : Color.clear)
         .clipShape(RoundedRectangle(cornerRadius: 8))
+        .onChange(of: completedSet?.weightKg) { _, newWeight in
+            if let newWeight, !isEditing {
+                editWeightDisplay = unit.fromKgRounded(newWeight)
+            }
+        }
+        .onChange(of: completedSet?.reps) { _, newReps in
+            if let newReps, !isEditing {
+                editReps = newReps
+            }
+        }
+        .onChange(of: completedSet?.rpe) { _, newRpe in
+            if let newRpe, !isEditing {
+                editRpe = newRpe
+            }
+        }
     }
 }
 
