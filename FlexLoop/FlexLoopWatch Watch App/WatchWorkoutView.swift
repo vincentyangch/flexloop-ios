@@ -47,6 +47,7 @@ struct WatchWorkoutView: View {
         .sheet(isPresented: $showRestTimer) {
             WatchRestTimerView(seconds: restSeconds) {
                 showRestTimer = false
+                loadCurrentExerciseDefaults()
             }
         }
         .onChange(of: sessionManager.workoutState?.isActive) { _, isActive in
