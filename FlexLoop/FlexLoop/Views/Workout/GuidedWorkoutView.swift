@@ -48,6 +48,7 @@ struct GuidedWorkoutView: View {
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button(String(localized: "workout.cancel")) {
+                        PhoneConnectivityManager.shared.sendWorkoutEnded(reason: "cancelled")
                         dismiss()
                     }
                 }
@@ -86,8 +87,12 @@ struct GuidedWorkoutView: View {
                 }
             }
             .onAppear {
+                PhoneConnectivityManager.shared.activeWorkoutViewModel = viewModel
                 viewModel.userId = userId
                 viewModel.loadFromPlanDay(planDay, exerciseNames: exerciseNames)
+            }
+            .onDisappear {
+                PhoneConnectivityManager.shared.activeWorkoutViewModel = nil
             }
         }
     }
