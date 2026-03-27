@@ -1,3 +1,4 @@
+import Combine
 import Foundation
 import WatchConnectivity
 
@@ -65,11 +66,17 @@ class PhoneConnectivityManager: NSObject, ObservableObject, WCSessionDelegate {
 
     private func handleCompleteSet(message: [String: Any],
                                    replyHandler: @escaping ([String: Any]) -> Void) {
-        guard let action = SyncMessageCoder.decodePayload(WatchCompleteSetAction.self, from: message),
-              let vm = activeWorkoutViewModel else {
+        guard let action = SyncMessageCoder.decodePayload(WatchCompleteSetAction.self, from: message) else {
+            print("[WatchSync] Failed to decode completeSet action")
             handleRequestState(replyHandler: replyHandler)
             return
         }
+        guard let vm = activeWorkoutViewModel else {
+            print("[WatchSync] activeWorkoutViewModel is nil — cannot process completeSet")
+            handleRequestState(replyHandler: replyHandler)
+            return
+        }
+        print("[WatchSync] completeSet: exercise=\(action.exerciseIndex) set=\(action.setNumber) weight=\(action.weightKg ?? 0) reps=\(action.reps ?? 0) rpe=\(action.rpe ?? 0)")
 
         DispatchQueue.main.async {
             vm.completeSet(

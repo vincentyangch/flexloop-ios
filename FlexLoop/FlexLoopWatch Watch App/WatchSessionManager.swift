@@ -34,14 +34,18 @@ class WatchSessionManager: NSObject, ObservableObject, WCSessionDelegate {
         )
         let message = SyncMessageCoder.encode(.completeSet, payload: action)
 
+        print("[WatchSync] Sending completeSet: exercise=\(exerciseIndex) set=\(setNumber)")
         WCSession.default.sendMessage(message, replyHandler: { [weak self] reply in
+            let type = SyncMessageCoder.decodeType(from: reply)
+            print("[WatchSync] completeSet reply type: \(type?.rawValue ?? "nil")")
             if let state = SyncMessageCoder.decodePayload(WorkoutSyncState.self, from: reply) {
+                print("[WatchSync] Got state update: exercise=\(state.currentExerciseIndex) sets=\(state.exercises.map { $0.completedSets.count })")
                 DispatchQueue.main.async {
                     self?.workoutState = state
                 }
             }
         }, errorHandler: { error in
-            print("sendCompleteSet error: \(error)")
+            print("[WatchSync] sendCompleteSet error: \(error)")
         })
     }
 
