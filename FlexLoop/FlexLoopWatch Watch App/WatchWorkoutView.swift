@@ -21,7 +21,12 @@ struct WatchWorkoutView: View {
 
     private var currentSetNumber: Int {
         guard let exercise = currentExercise else { return 1 }
-        return exercise.completedSets.count + 1
+        return min(exercise.completedSets.count + 1, exercise.targets.count)
+    }
+
+    private var allSetsDone: Bool {
+        guard let exercise = currentExercise else { return false }
+        return exercise.completedSets.count >= exercise.targets.count
     }
 
     private var totalSetsCompleted: Int {
@@ -66,73 +71,92 @@ struct WatchWorkoutView: View {
                     .minimumScaleFactor(0.6)
                     .multilineTextAlignment(.center)
 
-                Text("Set \(currentSetNumber) of \(exercise.targets.count)")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-
-                // Weight — Digital Crown
-                let displayWeight = unit.fromKgRounded(weight)
-                Text("\(displayWeight, specifier: "%.1f") \(unit.label)")
-                    .font(.title3.monospacedDigit().bold())
-                    .focusable()
-                    .digitalCrownRotation($weight, from: 0, through: 250,
-                                          by: unit == .metric ? 2.5 : 2.26796)
-
-                // Reps — +/- buttons
-                HStack {
-                    Button { if reps > 1 { reps -= 1 } } label: {
-                        Image(systemName: "minus").font(.caption2)
-                    }
-                    .buttonStyle(.bordered)
-                    .frame(width: 36)
-
-                    Text("\(reps) reps")
-                        .font(.subheadline.monospacedDigit())
-                        .frame(width: 60)
-
-                    Button { if reps < 99 { reps += 1 } } label: {
-                        Image(systemName: "plus").font(.caption2)
-                    }
-                    .buttonStyle(.bordered)
-                    .frame(width: 36)
-                }
-
-                // RPE — +/- buttons
-                HStack {
-                    Button { if rpe > 1 { rpe -= 0.5 } } label: {
-                        Image(systemName: "minus").font(.caption2)
-                    }
-                    .buttonStyle(.bordered)
-                    .frame(width: 36)
-
-                    Text("RPE \(rpe, specifier: "%.1f")")
-                        .font(.subheadline.monospacedDigit())
-                        .frame(width: 70)
-
-                    Button { if rpe < 10 { rpe += 0.5 } } label: {
-                        Image(systemName: "plus").font(.caption2)
-                    }
-                    .buttonStyle(.bordered)
-                    .frame(width: 36)
-                }
-
-                // Action buttons
-                HStack(spacing: 12) {
-                    Button {
-                        completeSet(exercise)
-                    } label: {
-                        Image(systemName: "checkmark")
-                    }
-                    .buttonStyle(.borderedProminent)
-                    .tint(.green)
+                if allSetsDone {
+                    Image(systemName: "checkmark.circle.fill")
+                        .font(.title2)
+                        .foregroundStyle(.green)
+                    Text("All sets done")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                    Text("Next exercise on iPhone")
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
 
                     Button {
                         dismiss()
                     } label: {
-                        Image(systemName: "xmark")
+                        Text("Back")
                     }
                     .buttonStyle(.bordered)
-                    .tint(.red)
+                } else {
+                    Text("Set \(currentSetNumber) of \(exercise.targets.count)")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+
+                    // Weight — Digital Crown
+                    let displayWeight = unit.fromKgRounded(weight)
+                    Text("\(displayWeight, specifier: "%.1f") \(unit.label)")
+                        .font(.title3.monospacedDigit().bold())
+                        .focusable()
+                        .digitalCrownRotation($weight, from: 0, through: 250,
+                                              by: unit == .metric ? 2.5 : 2.26796)
+
+                    // Reps — +/- buttons
+                    HStack {
+                        Button { if reps > 1 { reps -= 1 } } label: {
+                            Image(systemName: "minus").font(.caption2)
+                        }
+                        .buttonStyle(.bordered)
+                        .frame(width: 36)
+
+                        Text("\(reps) reps")
+                            .font(.subheadline.monospacedDigit())
+                            .frame(width: 60)
+
+                        Button { if reps < 99 { reps += 1 } } label: {
+                            Image(systemName: "plus").font(.caption2)
+                        }
+                        .buttonStyle(.bordered)
+                        .frame(width: 36)
+                    }
+
+                    // RPE — +/- buttons
+                    HStack {
+                        Button { if rpe > 1 { rpe -= 0.5 } } label: {
+                            Image(systemName: "minus").font(.caption2)
+                        }
+                        .buttonStyle(.bordered)
+                        .frame(width: 36)
+
+                        Text("RPE \(rpe, specifier: "%.1f")")
+                            .font(.subheadline.monospacedDigit())
+                            .frame(width: 70)
+
+                        Button { if rpe < 10 { rpe += 0.5 } } label: {
+                            Image(systemName: "plus").font(.caption2)
+                        }
+                        .buttonStyle(.bordered)
+                        .frame(width: 36)
+                    }
+
+                    // Action buttons
+                    HStack(spacing: 12) {
+                        Button {
+                            completeSet(exercise)
+                        } label: {
+                            Image(systemName: "checkmark")
+                        }
+                        .buttonStyle(.borderedProminent)
+                        .tint(.green)
+
+                        Button {
+                            dismiss()
+                        } label: {
+                            Image(systemName: "xmark")
+                        }
+                        .buttonStyle(.bordered)
+                        .tint(.red)
+                    }
                 }
 
                 Text("\(totalSetsCompleted) sets done")
