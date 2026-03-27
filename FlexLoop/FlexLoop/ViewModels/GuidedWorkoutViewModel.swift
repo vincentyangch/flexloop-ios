@@ -25,6 +25,8 @@ struct GuidedExercise: Identifiable {
     let id = UUID()
     let exerciseId: Int
     let planExerciseId: Int?
+    let name: String
+    let restSeconds: Int
     var targetSets: [GuidedSetTarget]
     var completedSets: [CompletedSet] = []
     var isSkipped = false
@@ -129,6 +131,8 @@ final class GuidedWorkoutViewModel {
                 return GuidedExercise(
                     exerciseId: ex.exerciseId,
                     planExerciseId: ex.id,
+                    name: exerciseNames[ex.exerciseId] ?? "Exercise #\(ex.exerciseId)",
+                    restSeconds: group.restAfterGroupSec,
                     targetSets: targets,
                     notes: ex.notes
                 )
@@ -137,6 +141,8 @@ final class GuidedWorkoutViewModel {
         currentExerciseIndex = 0
         isWorkoutActive = true
         startedAt = Date()
+        // Task 4: PhoneConnectivityManager.shared.sendWorkoutStarted(stateSnapshot())
+        PhoneConnectivityManager.shared.sendWorkoutStarted(stateSnapshot())
     }
 
     // MARK: - Set Completion
@@ -171,6 +177,8 @@ final class GuidedWorkoutViewModel {
             await checkPR(exerciseId: exercises[exerciseIndex].exerciseId,
                           weight: weightKg, reps: reps)
         }
+        // Task 4: PhoneConnectivityManager.shared.sendStateUpdate(stateSnapshot())
+        PhoneConnectivityManager.shared.sendStateUpdate(stateSnapshot())
     }
 
     private func checkPR(exerciseId: Int, weight: Double?, reps: Int?) async {
@@ -278,6 +286,8 @@ final class GuidedWorkoutViewModel {
         guard exercises.indices.contains(currentExerciseIndex) else { return }
         exercises[currentExerciseIndex].isSkipped = true
         nextExercise()
+        // Task 4: PhoneConnectivityManager.shared.sendStateUpdate(stateSnapshot())
+        PhoneConnectivityManager.shared.sendStateUpdate(stateSnapshot())
     }
 
     func reorderExercise(from: IndexSet, to: Int) {
@@ -366,7 +376,44 @@ final class GuidedWorkoutViewModel {
             duration: duration,
             newPRs: detectedPRs
         )
+        // Task 4: PhoneConnectivityManager.shared.sendWorkoutEnded(reason: "finished")
+        PhoneConnectivityManager.shared.sendWorkoutEnded(reason: "finished")
         showSummary = true
+    }
+
+    // MARK: - Watch Sync
+
+    func stateSnapshot() -> WorkoutSyncState {
+        WorkoutSyncState(
+            isActive: isWorkoutActive,
+            currentExerciseIndex: currentExerciseIndex,
+            exercises: exercises.map { ex in
+                SyncExercise(
+                    exerciseId: ex.exerciseId,
+                    name: ex.name,
+                    isSkipped: ex.isSkipped,
+                    restSeconds: ex.restSeconds,
+                    targets: ex.targetSets.map { t in
+                        SyncSetTarget(
+                            setNumber: t.setNumber,
+                            weightKg: t.targetWeightKg,
+                            reps: t.targetReps,
+                            rpe: t.targetRpe
+                        )
+                    },
+                    completedSets: ex.completedSets.map { c in
+                        SyncCompletedSet(
+                            setNumber: c.setNumber,
+                            weightKg: c.weightKg,
+                            reps: c.reps,
+                            rpe: c.rpe
+                        )
+                    }
+                )
+            },
+            restTimerRemaining: isRestTimerActive ? restTimeRemaining : nil,
+            startedAt: startedAt ?? Date()
+        )
     }
 
     func advanceCycle(apiClient: APIClient, userId: Int) async {
