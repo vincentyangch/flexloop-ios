@@ -74,6 +74,9 @@ final class GuidedWorkoutViewModel {
     var showPRAlert = false
     var detectedPRs: [PRAlert] = []
 
+    // User
+    var userId: Int = 0
+
     // Exercise sidebar
     var showExerciseList = false
 
@@ -174,11 +177,13 @@ final class GuidedWorkoutViewModel {
         let apiClient = APIClient(config: .current)
 
         struct PRCheckBody: Codable {
+            let userId: Int
             let exerciseId: Int
             let weight: Double?
             let reps: Int?
 
             enum CodingKeys: String, CodingKey {
+                case userId = "user_id"
                 case exerciseId = "exercise_id"
                 case weight, reps
             }
@@ -199,12 +204,12 @@ final class GuidedWorkoutViewModel {
         }
 
         do {
-            guard let url = await apiClient.buildURL(path: "/api/workouts/0/check-pr") else { return }
+            guard let url = await apiClient.buildURL(path: "/api/check-pr") else { return }
             var request = URLRequest(url: url)
             request.httpMethod = "POST"
             request.setValue("application/json", forHTTPHeaderField: "Content-Type")
             request.httpBody = try JSONEncoder().encode(
-                PRCheckBody(exerciseId: exerciseId, weight: weight, reps: reps)
+                PRCheckBody(userId: userId, exerciseId: exerciseId, weight: weight, reps: reps)
             )
             let (data, _) = try await URLSession.shared.data(for: request)
             let response = try JSONDecoder().decode(PRCheckResponse.self, from: data)

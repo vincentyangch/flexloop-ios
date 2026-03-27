@@ -40,6 +40,16 @@ struct PlanListView: View {
                 }
             }
             .task { await loadPlans() }
+            .alert(String(localized: "common.error"), isPresented: Binding(
+                get: { viewModel.errorMessage != nil },
+                set: { if !$0 { viewModel.errorMessage = nil } }
+            )) {
+                Button(String(localized: "common.ok")) { viewModel.errorMessage = nil }
+            } message: {
+                if let msg = viewModel.errorMessage {
+                    Text(msg)
+                }
+            }
         }
     }
 

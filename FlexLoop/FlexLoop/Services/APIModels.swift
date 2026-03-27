@@ -235,6 +235,19 @@ struct APIPlanExercise: Codable, Sendable, Identifiable {
         case rpeTarget = "rpe_target"
         case setsJson = "sets_json"
     }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.decodeIfPresent(Int.self, forKey: .id)
+        exerciseId = try container.decode(Int.self, forKey: .exerciseId)
+        order = try container.decodeIfPresent(Int.self, forKey: .order) ?? 0
+        sets = try container.decode(Int.self, forKey: .sets)
+        reps = try container.decode(Int.self, forKey: .reps)
+        weight = try container.decodeIfPresent(Double.self, forKey: .weight)
+        rpeTarget = try container.decodeIfPresent(Double.self, forKey: .rpeTarget)
+        setsJson = try container.decodeIfPresent([APISetTarget].self, forKey: .setsJson)
+        notes = try container.decodeIfPresent(String.self, forKey: .notes)
+    }
 }
 
 struct APIPlanExerciseGroup: Codable, Sendable, Identifiable {
@@ -248,6 +261,15 @@ struct APIPlanExerciseGroup: Codable, Sendable, Identifiable {
         case id, order, exercises
         case groupType = "group_type"
         case restAfterGroupSec = "rest_after_group_sec"
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.decodeIfPresent(Int.self, forKey: .id)
+        groupType = try container.decode(String.self, forKey: .groupType)
+        order = try container.decodeIfPresent(Int.self, forKey: .order) ?? 0
+        restAfterGroupSec = try container.decodeIfPresent(Int.self, forKey: .restAfterGroupSec) ?? 90
+        exercises = try container.decode([APIPlanExercise].self, forKey: .exercises)
     }
 }
 

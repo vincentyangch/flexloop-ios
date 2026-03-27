@@ -27,7 +27,7 @@ final class PlanListViewModel {
             plans = response.plans
             activePlan = plans.first(where: { $0.status == "active" })
         } catch {
-            errorMessage = "Could not load plans. Check server connection."
+            errorMessage = String(localized: "error.loadPlans")
         }
 
         isLoading = false
@@ -43,7 +43,7 @@ final class PlanListViewModel {
                 await loadPlans(apiClient: apiClient, userId: userId)
             }
         } catch {
-            errorMessage = "Failed to activate plan."
+            errorMessage = String(localized: "error.activatePlan")
         }
     }
 
@@ -54,7 +54,7 @@ final class PlanListViewModel {
                 await loadPlans(apiClient: apiClient, userId: userId)
             }
         } catch {
-            errorMessage = "Failed to archive plan."
+            errorMessage = String(localized: "error.archivePlan")
         }
     }
 
@@ -66,7 +66,7 @@ final class PlanListViewModel {
                 activePlan = plans.first(where: { $0.status == "active" })
             }
         } catch {
-            errorMessage = "Failed to delete plan."
+            errorMessage = String(localized: "error.deletePlan")
         }
     }
 
@@ -79,10 +79,10 @@ final class PlanListViewModel {
             if response.status == "success" {
                 await loadPlans(apiClient: apiClient, userId: userId)
             } else {
-                errorMessage = response.message ?? "AI returned an invalid plan"
+                errorMessage = response.message ?? String(localized: "error.invalidPlan")
             }
         } catch {
-            errorMessage = "Failed to generate plan. Check server connection."
+            errorMessage = String(localized: "error.generatePlan")
         }
 
         isGenerating = false

@@ -86,6 +86,7 @@ struct GuidedWorkoutView: View {
                 }
             }
             .onAppear {
+                viewModel.userId = userId
                 viewModel.loadFromPlanDay(planDay, exerciseNames: exerciseNames)
             }
         }

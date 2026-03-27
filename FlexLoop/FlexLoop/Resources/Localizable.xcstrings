@@ -1383,6 +1383,42 @@
         "zh-Hans": { "stringUnit": { "state": "translated", "value": "新纪录" } }
       }
     },
+    "error.loadPlans": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Could not load plans. Check server connection." } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "无法加载计划，请检查网络连接。" } }
+      }
+    },
+    "error.activatePlan": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Failed to activate plan." } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "激活计划失败。" } }
+      }
+    },
+    "error.archivePlan": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Failed to archive plan." } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "归档计划失败。" } }
+      }
+    },
+    "error.deletePlan": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Failed to delete plan." } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "删除计划失败。" } }
+      }
+    },
+    "error.invalidPlan": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "AI returned an invalid plan." } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "AI 生成的计划无效。" } }
+      }
+    },
+    "error.generatePlan": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Failed to generate plan. Check server connection." } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "生成计划失败，请检查网络连接。" } }
+      }
+    },
     "common.cancel": {
       "localizations": {
         "en": { "stringUnit": { "state": "translated", "value": "Cancel" } },
@@ -1451,6 +1487,22 @@
           "stringUnit": {
             "state": "translated",
             "value": "训练详情"
+          }
+        }
+      }
+    },
+    "common.error": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Error"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "错误"
           }
         }
       }

@@ -59,7 +59,7 @@ actor APIClient {
     }
 
     func post<Body: Encodable, Response: Decodable>(
-        _ path: String, body: Body
+        _ path: String, body: Body, timeout: TimeInterval = 60
     ) async throws -> Response {
         guard let url = buildURL(path: path) else {
             throw APIError.invalidURL
@@ -68,6 +68,7 @@ actor APIClient {
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.timeoutInterval = timeout
         request.httpBody = try encoder.encode(body)
 
         let (data, response) = try await session.data(for: request)
@@ -122,7 +123,7 @@ actor APIClient {
     }
 
     func sendChatMessage(request: AIChatRequest) async throws -> AIChatResponse {
-        try await post("/api/ai/chat", body: request)
+        try await post("/api/ai/chat", body: request, timeout: 120)
     }
 
     // MARK: - Plans
@@ -162,7 +163,7 @@ actor APIClient {
     }
 
     func generatePlan(userId: Int) async throws -> APIPlanGenerateResponse {
-        try await post("/api/ai/plan/generate", body: APIPlanGenerateRequest(userId: userId))
+        try await post("/api/ai/plan/generate", body: APIPlanGenerateRequest(userId: userId), timeout: 120)
     }
 
     // MARK: - Cycle Tracker
