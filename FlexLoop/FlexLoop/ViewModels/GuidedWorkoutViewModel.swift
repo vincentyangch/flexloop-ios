@@ -177,7 +177,13 @@ final class GuidedWorkoutViewModel {
             await checkPR(exerciseId: exercises[exerciseIndex].exerciseId,
                           weight: weightKg, reps: reps)
         }
-        // Task 4: PhoneConnectivityManager.shared.sendStateUpdate(stateSnapshot())
+
+        // Auto-advance to next exercise when all sets are done
+        let targetCount = exercises[exerciseIndex].targetSets.count
+        if exercises[exerciseIndex].completedSets.count >= targetCount {
+            nextExercise()
+        }
+
         PhoneConnectivityManager.shared.sendStateUpdate(stateSnapshot())
     }
 
