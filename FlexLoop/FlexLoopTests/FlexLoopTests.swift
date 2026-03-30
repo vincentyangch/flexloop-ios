@@ -23,7 +23,8 @@ struct ModelTests {
 
         let user = CachedUser(
             serverId: 1, name: "Test User", gender: "male", age: 28,
-            heightCm: 180.0, weightKg: 82.0, experienceLevel: "intermediate",
+            height: 180.0, weight: 82.0, weightUnit: "kg", heightUnit: "cm",
+            experienceLevel: "intermediate",
             goals: "hypertrophy", availableEquipment: ["barbell"]
         )
         context.insert(user)

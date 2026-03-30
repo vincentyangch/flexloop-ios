@@ -47,7 +47,8 @@ struct HomeView: View {
                         planDay: next.day,
                         planDayId: next.day.id,
                         userId: user.serverId,
-                        exerciseNames: viewModel.exerciseNames
+                        exerciseNames: viewModel.exerciseNames,
+                        unitSymbol: user.weightUnit
                     )
                 }
             }

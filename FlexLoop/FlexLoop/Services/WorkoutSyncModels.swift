@@ -8,6 +8,7 @@ struct WorkoutSyncState: Codable {
     let exercises: [SyncExercise]
     let restTimerRemaining: Int?
     let startedAt: Date
+    let weightUnit: String
 }
 
 struct SyncExercise: Codable {

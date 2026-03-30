@@ -2,29 +2,14 @@ import SwiftUI
 
 struct SetEntryRow: View {
     let setNumber: Int
-    let previousWeight: Double?  // in kg
+    let previousWeight: Double?
     let previousReps: Int?
+    let unitSymbol: String
 
-    @Binding var weight: Double?  // stored in kg
+    @Binding var weight: Double?
     @Binding var reps: Int?
     @Binding var rpe: Double?
     @Binding var setType: SetType
-
-    private let unit = WeightUnit.current
-
-    /// Weight displayed/entered in user's unit
-    private var displayWeight: Binding<Double?> {
-        Binding(
-            get: {
-                guard let w = weight else { return nil }
-                return unit.fromKg(w)
-            },
-            set: { newValue in
-                guard let v = newValue else { weight = nil; return }
-                weight = unit.toKg(v)
-            }
-        )
-    }
 
     var body: some View {
         HStack(spacing: 12) {
@@ -49,16 +34,16 @@ struct SetEntryRow: View {
 
             VStack(alignment: .center, spacing: 2) {
                 HStack(spacing: 2) {
-                    TextField("--", value: displayWeight, format: .number)
+                    TextField("--", value: $weight, format: .number)
                         .keyboardType(.decimalPad)
                         .multilineTextAlignment(.center)
                         .frame(width: 56)
-                    Text(unit.symbol)
+                    Text(unitSymbol)
                         .font(.caption2)
                         .foregroundStyle(.secondary)
                 }
                 if let prev = previousWeight {
-                    Text("\(unit.fromKgRounded(prev), specifier: "%.1f")")
+                    Text("\(prev, specifier: "%.1f")")
                         .font(.caption2)
                         .foregroundStyle(.secondary)
                 }

@@ -3,21 +3,21 @@ import SwiftUI
 struct PlanExerciseEditView: View {
     @Binding var exercise: EditablePlanExercise
     let exerciseName: String
+    let unitSymbol: String
 
-    private let unit = WeightUnit.current
     @State private var setTargets: [EditableSetTarget] = []
 
-    init(exercise: Binding<EditablePlanExercise>, exerciseName: String) {
+    init(exercise: Binding<EditablePlanExercise>, exerciseName: String, unitSymbol: String) {
         _exercise = exercise
         self.exerciseName = exerciseName
-        let u = WeightUnit.current
+        self.unitSymbol = unitSymbol
 
-        // Initialize set targets from setsJson or generate defaults (convert kg to display unit)
+        // Initialize set targets from setsJson or generate defaults (values are already in user's unit)
         if let setsJson = exercise.wrappedValue.setsJson, !setsJson.isEmpty {
             _setTargets = State(initialValue: setsJson.map { target in
                 EditableSetTarget(
                     setNumber: target.setNumber,
-                    targetWeightDisplay: target.targetWeightKg.map { u.fromKgRounded($0) },
+                    targetWeightDisplay: target.targetWeight,
                     targetReps: target.targetReps,
                     targetRpe: target.targetRpe
                 )
@@ -26,7 +26,7 @@ struct PlanExerciseEditView: View {
             let defaults = (1...exercise.wrappedValue.sets).map { num in
                 EditableSetTarget(
                     setNumber: num,
-                    targetWeightDisplay: exercise.wrappedValue.weight.map { u.fromKgRounded($0) },
+                    targetWeightDisplay: exercise.wrappedValue.weight,
                     targetReps: exercise.wrappedValue.reps,
                     targetRpe: exercise.wrappedValue.rpeTarget
                 )
@@ -68,7 +68,7 @@ struct PlanExerciseEditView: View {
 
                         HStack(spacing: 12) {
                             VStack(alignment: .leading, spacing: 2) {
-                                Text("\(String(localized: "plan.edit.weight")) (\(unit.symbol))")
+                                Text("\(String(localized: "plan.edit.weight")) (\(unitSymbol))")
                                     .font(.caption)
                                     .foregroundStyle(.secondary)
                                 TextField("--", value: $target.targetWeightDisplay, format: .number)
@@ -112,18 +112,18 @@ struct PlanExerciseEditView: View {
         .navigationTitle(exerciseName)
         .navigationBarTitleDisplayMode(.inline)
         .onDisappear {
-            // Sync back to exercise (convert display unit back to kg)
+            // Sync back to exercise (values are stored as-is, no conversion needed)
             exercise.sets = setTargets.count
             exercise.setsJson = setTargets.map { target in
                 APISetTarget(
                     setNumber: target.setNumber,
-                    targetWeightKg: target.targetWeightDisplay.map { unit.toKg($0) },
+                    targetWeight: target.targetWeightDisplay,
                     targetReps: target.targetReps,
                     targetRpe: target.targetRpe
                 )
             }
             if let first = setTargets.first {
-                exercise.weight = first.targetWeightDisplay.map { unit.toKg($0) }
+                exercise.weight = first.targetWeightDisplay
                 exercise.rpeTarget = first.targetRpe
             }
         }
@@ -148,7 +148,7 @@ struct PlanExerciseEditView: View {
 struct EditableSetTarget: Identifiable {
     let id = UUID()
     var setNumber: Int
-    var targetWeightDisplay: Double?  // In user's preferred unit (kg or lbs)
+    var targetWeightDisplay: Double?
     var targetReps: Int
     var targetRpe: Double?
 }

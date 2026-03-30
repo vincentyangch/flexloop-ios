@@ -78,6 +78,7 @@ final class GuidedWorkoutViewModel {
 
     // User
     var userId: Int = 0
+    var weightUnit: String = "kg"
 
     // Exercise sidebar
     var showExerciseList = false
@@ -418,7 +419,8 @@ final class GuidedWorkoutViewModel {
                 )
             },
             restTimerRemaining: isRestTimerActive ? restTimeRemaining : nil,
-            startedAt: startedAt ?? Date()
+            startedAt: startedAt ?? Date(),
+            weightUnit: weightUnit
         )
     }
 

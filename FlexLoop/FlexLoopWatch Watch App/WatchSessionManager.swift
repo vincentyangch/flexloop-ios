@@ -24,11 +24,11 @@ class WatchSessionManager: NSObject, ObservableObject, WCSessionDelegate {
     // MARK: - Send to iPhone
 
     func sendCompleteSet(exerciseIndex: Int, setNumber: Int,
-                         weightKg: Double?, reps: Int?, rpe: Double?) {
+                         weight: Double?, reps: Int?, rpe: Double?) {
         let action = WatchCompleteSetAction(
             exerciseIndex: exerciseIndex,
             setNumber: setNumber,
-            weightKg: weightKg,
+            weight: weight,
             reps: reps,
             rpe: rpe
         )

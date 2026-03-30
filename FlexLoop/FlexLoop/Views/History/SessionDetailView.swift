@@ -2,6 +2,7 @@ import SwiftUI
 
 struct SessionDetailView: View {
     let session: CachedWorkoutSession
+    let unitSymbol: String
 
     var body: some View {
         List {
@@ -39,8 +40,7 @@ struct SessionDetailView: View {
                         Spacer()
 
                         if let w = set.weight, let r = set.reps {
-                            let unit = WeightUnit.current
-                            Text("\(unit.fromKgRounded(w), specifier: "%.1f") \(unit.symbol) x \(r)")
+                            Text("\(w, specifier: "%.1f") \(unitSymbol) x \(r)")
                                 .font(.subheadline.monospacedDigit())
                         }
 

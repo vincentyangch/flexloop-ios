@@ -49,7 +49,7 @@ struct ProgressTabView: View {
                 ScrollView {
                     VStack(spacing: 20) {
                         ForEach(viewModel.e1rmData) { exercise in
-                            E1RMChartCard(exercise: exercise)
+                            E1RMChartCard(exercise: exercise, unitSymbol: users.first?.weightUnit ?? "kg")
                         }
                     }
                     .padding()

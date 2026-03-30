@@ -1,9 +1,12 @@
 import SwiftUI
+import SwiftData
 
 struct SettingsView: View {
-    @AppStorage("unitSystem") private var unitSystem = "metric"
     @AppStorage("sessionFeedbackEnabled") private var sessionFeedbackEnabled = false
     @AppStorage("measurementReminders") private var measurementReminders = false
+
+    @Query private var users: [CachedUser]
+    private var currentUser: CachedUser? { users.first }
 
     var body: some View {
         NavigationStack {
@@ -15,10 +18,15 @@ struct SettingsView: View {
                 }
 
                 Section(String(localized: "settings.weightUnit")) {
-                    Picker(String(localized: "settings.weightUnit"), selection: $unitSystem) {
-                        Text(String(localized: "settings.metric")).tag("metric")
-                        Text(String(localized: "settings.imperial")).tag("imperial")
+                    HStack {
+                        Text(String(localized: "settings.weightUnit"))
+                        Spacer()
+                        Text(currentUser?.weightUnit.uppercased() ?? "KG")
+                            .foregroundStyle(.secondary)
                     }
+                    Text(String(localized: "settings.unitChangeHint"))
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
                 }
 
                 Section(String(localized: "tab.workout")) {

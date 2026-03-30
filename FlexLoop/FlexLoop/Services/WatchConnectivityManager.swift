@@ -76,13 +76,13 @@ class PhoneConnectivityManager: NSObject, ObservableObject, WCSessionDelegate {
             handleRequestState(replyHandler: replyHandler)
             return
         }
-        print("[WatchSync] completeSet: exercise=\(action.exerciseIndex) set=\(action.setNumber) weight=\(action.weightKg ?? 0) reps=\(action.reps ?? 0) rpe=\(action.rpe ?? 0)")
+        print("[WatchSync] completeSet: exercise=\(action.exerciseIndex) set=\(action.setNumber) weight=\(action.weight ?? 0) reps=\(action.reps ?? 0) rpe=\(action.rpe ?? 0)")
 
         DispatchQueue.main.async {
             vm.completeSet(
                 exerciseIndex: action.exerciseIndex,
                 setNumber: action.setNumber,
-                weightKg: action.weightKg,
+                weight: action.weight,
                 reps: action.reps,
                 rpe: action.rpe
             )

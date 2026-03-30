@@ -10,6 +10,7 @@ struct GuidedWorkoutView: View {
     let planDayId: Int?
     let userId: Int
     let exerciseNames: [Int: String]
+    let unitSymbol: String
 
     var body: some View {
         NavigationStack {
@@ -89,6 +90,7 @@ struct GuidedWorkoutView: View {
             .onAppear {
                 PhoneConnectivityManager.shared.activeWorkoutViewModel = viewModel
                 viewModel.userId = userId
+                viewModel.weightUnit = unitSymbol
                 viewModel.loadFromPlanDay(planDay, exerciseNames: exerciseNames)
             }
             .onDisappear {
@@ -150,7 +152,7 @@ struct GuidedWorkoutView: View {
             HStack {
                 Text("Set")
                     .frame(width: 35, alignment: .leading)
-                Text("\(String(localized: "workout.weight")) (\(WeightUnit.current.symbol))")
+                Text("\(String(localized: "workout.weight")) (\(unitSymbol))")
                     .frame(maxWidth: .infinity)
                 Text(String(localized: "workout.reps"))
                     .frame(width: 50)
@@ -167,15 +169,16 @@ struct GuidedWorkoutView: View {
                 let completedSet = exercise.completedSets.first(where: { $0.setNumber == target.setNumber })
                 GuidedSetRow(
                     setNumber: target.setNumber,
-                    targetWeightKg: target.targetWeightKg,
+                    targetWeight: target.targetWeight,
                     targetReps: target.targetReps,
                     targetRpe: target.targetRpe,
                     completedSet: completedSet,
+                    unitSymbol: unitSymbol,
                     onComplete: { weight, reps, rpe in
                         viewModel.completeSet(
                             exerciseIndex: viewModel.currentExerciseIndex,
                             setNumber: target.setNumber,
-                            weightKg: weight,
+                            weight: weight,
                             reps: reps,
                             rpe: rpe
                         )
@@ -185,7 +188,7 @@ struct GuidedWorkoutView: View {
                             viewModel.editCompletedSet(
                                 exerciseIndex: viewModel.currentExerciseIndex,
                                 setId: setId,
-                                weightKg: weight,
+                                weight: weight,
                                 reps: reps,
                                 rpe: rpe
                             )
@@ -317,17 +320,15 @@ struct GuidedWorkoutView: View {
 
 struct GuidedSetRow: View {
     let setNumber: Int
-    let targetWeightKg: Double?
+    let targetWeight: Double?
     let targetReps: Int
     let targetRpe: Double?
     let completedSet: CompletedSet?
+    let unitSymbol: String
 
     let onComplete: (Double?, Int?, Double?) -> Void
     let onEdit: (Double?, Int?, Double?) -> Void
 
-    private let unit = WeightUnit.current
-
-    // Display weight in user's preferred unit
     @State private var editWeightDisplay: Double?
     @State private var editReps: Int?
     @State private var editRpe: Double?
@@ -335,27 +336,21 @@ struct GuidedSetRow: View {
 
     var isCompleted: Bool { completedSet != nil }
 
-    init(setNumber: Int, targetWeightKg: Double?, targetReps: Int, targetRpe: Double?,
-         completedSet: CompletedSet?,
+    init(setNumber: Int, targetWeight: Double?, targetReps: Int, targetRpe: Double?,
+         completedSet: CompletedSet?, unitSymbol: String,
          onComplete: @escaping (Double?, Int?, Double?) -> Void,
          onEdit: @escaping (Double?, Int?, Double?) -> Void) {
         self.setNumber = setNumber
-        self.targetWeightKg = targetWeightKg
+        self.targetWeight = targetWeight
         self.targetReps = targetReps
         self.targetRpe = targetRpe
         self.completedSet = completedSet
+        self.unitSymbol = unitSymbol
         self.onComplete = onComplete
         self.onEdit = onEdit
-        let u = WeightUnit.current
-        let weightKg = completedSet?.weightKg ?? targetWeightKg
-        _editWeightDisplay = State(initialValue: weightKg.map { u.fromKgRounded($0) })
+        _editWeightDisplay = State(initialValue: completedSet?.weight ?? targetWeight)
         _editReps = State(initialValue: completedSet?.reps ?? targetReps)
         _editRpe = State(initialValue: completedSet?.rpe ?? targetRpe)
-    }
-
-    /// Convert display weight back to kg for storage
-    private var editWeightKg: Double? {
-        editWeightDisplay.map { unit.toKg($0) }
     }
 
     var body: some View {
@@ -385,7 +380,7 @@ struct GuidedSetRow: View {
             if isCompleted {
                 if isEditing {
                     Button {
-                        onEdit(editWeightKg, editReps, editRpe)
+                        onEdit(editWeightDisplay, editReps, editRpe)
                         isEditing = false
                     } label: {
                         Image(systemName: "checkmark.circle.fill")
@@ -405,7 +400,7 @@ struct GuidedSetRow: View {
                 }
             } else {
                 Button {
-                    onComplete(editWeightKg, editReps, editRpe)
+                    onComplete(editWeightDisplay, editReps, editRpe)
                 } label: {
                     Image(systemName: "circle")
                         .foregroundStyle(.secondary)
@@ -417,9 +412,9 @@ struct GuidedSetRow: View {
         .padding(.vertical, 4)
         .background(isCompleted ? Color.green.opacity(0.05) : Color.clear)
         .clipShape(RoundedRectangle(cornerRadius: 8))
-        .onChange(of: completedSet?.weightKg) { _, newWeight in
+        .onChange(of: completedSet?.weight) { _, newWeight in
             if let newWeight, !isEditing {
-                editWeightDisplay = unit.fromKgRounded(newWeight)
+                editWeightDisplay = newWeight
             }
         }
         .onChange(of: completedSet?.reps) { _, newReps in

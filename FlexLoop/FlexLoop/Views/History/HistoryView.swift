@@ -5,6 +5,9 @@ struct HistoryView: View {
     @Query(sort: \CachedWorkoutSession.startedAt, order: .reverse)
     private var sessions: [CachedWorkoutSession]
 
+    @Query private var users: [CachedUser]
+    private var unitSymbol: String { users.first?.weightUnit ?? "kg" }
+
     var body: some View {
         NavigationStack {
             List {
@@ -12,7 +15,7 @@ struct HistoryView: View {
                     Section(month) {
                         ForEach(monthSessions, id: \.startedAt) { session in
                             NavigationLink {
-                                SessionDetailView(session: session)
+                                SessionDetailView(session: session, unitSymbol: unitSymbol)
                             } label: {
                                 HStack {
                                     VStack(alignment: .leading) {

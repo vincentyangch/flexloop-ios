@@ -13,6 +13,8 @@ struct PlanDayEditView: View {
     @State private var showExercisePicker = false
 
     @Query(sort: \CachedExercise.name) private var cachedExercises: [CachedExercise]
+    @Query private var users: [CachedUser]
+    private var unitSymbol: String { users.first?.weightUnit ?? "kg" }
 
     var onSave: (([EditablePlanExercise], String, String) -> Void)?
 
@@ -55,7 +57,8 @@ struct PlanDayEditView: View {
                         NavigationLink {
                             PlanExerciseEditView(
                                 exercise: $exercise,
-                                exerciseName: exerciseName(exercise.exerciseId)
+                                exerciseName: exerciseName(exercise.exerciseId),
+                                unitSymbol: unitSymbol
                             )
                         } label: {
                             HStack {

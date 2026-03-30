@@ -10,7 +10,10 @@ struct WatchWorkoutView: View {
     @State private var showRestTimer = false
     @State private var restSeconds = 120
 
-    private let unit = WeightUnit.current
+    private var unit: WeightUnit {
+        guard let unitRaw = sessionManager.workoutState?.weightUnit else { return .kg }
+        return WeightUnit(rawValue: unitRaw) ?? .kg
+    }
 
     private var state: WorkoutSyncState? { sessionManager.workoutState }
 
@@ -95,12 +98,11 @@ struct WatchWorkoutView: View {
                         .foregroundStyle(.secondary)
 
                     // Weight — Digital Crown
-                    let displayWeight = unit.fromKgRounded(weight)
-                    Text("\(displayWeight, specifier: "%.1f") \(unit.label)")
+                    Text("\(weight, specifier: "%.1f") \(unit.label)")
                         .font(.title3.monospacedDigit().bold())
                         .focusable()
-                        .digitalCrownRotation($weight, from: 0, through: 250,
-                                              by: unit == .metric ? 2.5 : 2.26796)
+                        .digitalCrownRotation($weight, from: 0, through: 500,
+                                              by: unit.increment)
 
                     // Reps — +/- buttons
                     HStack {
@@ -189,7 +191,7 @@ struct WatchWorkoutView: View {
         let target = exercise.targets.indices.contains(setIndex)
             ? exercise.targets[setIndex] : exercise.targets.first
 
-        weight = target?.weightKg ?? 0
+        weight = target?.weight ?? 0
         reps = target?.reps ?? 8
         rpe = target?.rpe ?? 7.0
         restSeconds = exercise.restSeconds
@@ -201,7 +203,7 @@ struct WatchWorkoutView: View {
         sessionManager.sendCompleteSet(
             exerciseIndex: state.currentExerciseIndex,
             setNumber: currentSetNumber,
-            weightKg: weight,
+            weight: weight,
             reps: reps,
             rpe: rpe
         )
