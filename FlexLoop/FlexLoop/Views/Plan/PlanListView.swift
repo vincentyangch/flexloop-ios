@@ -29,7 +29,7 @@ struct PlanListView: View {
                 }
             }
             .task { await loadPlans() }
-            .sheet(isPresented: $showModePicker) {
+            .sheet(isPresented: $showModePicker, onDismiss: { viewModel.errorMessage = nil }) {
                 PlanModePickerView(
                     isGenerating: $viewModel.isGenerating,
                     errorMessage: $viewModel.errorMessage,
@@ -158,7 +158,7 @@ struct PlanRowView: View {
             HStack(spacing: 8) {
                 Label(plan.splitType.replacingOccurrences(of: "_", with: " ").capitalized,
                       systemImage: "figure.strengthtraining.traditional")
-                Text("\(plan.cycleLength)-day cycle")
+                Text(String(localized: "plan.cycleLengthLabel.\(plan.cycleLength)"))
             }
             .font(.caption)
             .foregroundStyle(.secondary)
@@ -185,7 +185,7 @@ struct PlanDetailView: View {
                         Label(plan.splitType.replacingOccurrences(of: "_", with: " ").capitalized,
                               systemImage: "figure.strengthtraining.traditional")
                         Spacer()
-                        Text("\(plan.cycleLength)-day cycle")
+                        Text(String(localized: "plan.cycleLengthLabel.\(plan.cycleLength)"))
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     }

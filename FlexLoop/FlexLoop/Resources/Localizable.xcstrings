@@ -1830,6 +1830,12 @@
         "en": { "stringUnit": { "state": "translated", "value": "Replace" } },
         "zh-Hans": { "stringUnit": { "state": "translated", "value": "替换" } }
       }
+    },
+    "plan.cycleLengthLabel.%lld": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "%lld-day cycle" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "%lld天循环" } }
+      }
     }
   },
   "version": "1.0"
