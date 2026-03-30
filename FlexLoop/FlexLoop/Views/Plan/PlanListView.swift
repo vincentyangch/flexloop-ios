@@ -40,7 +40,7 @@ struct PlanListView: View {
                 )
             }
             .alert(String(localized: "common.error"), isPresented: Binding(
-                get: { viewModel.errorMessage != nil },
+                get: { viewModel.errorMessage != nil && !showModePicker },
                 set: { if !$0 { viewModel.errorMessage = nil } }
             )) {
                 Button(String(localized: "common.ok")) { viewModel.errorMessage = nil }
