@@ -7,17 +7,19 @@ struct APIUser: Codable, Sendable {
     let name: String
     let gender: String
     let age: Int
-    let heightCm: Double
-    let weightKg: Double
+    let height: Double
+    let weight: Double
+    let weightUnit: String
+    let heightUnit: String
     let experienceLevel: String
     let goals: String
     let availableEquipment: [String]
     let createdAt: String
 
     enum CodingKeys: String, CodingKey {
-        case id, name, gender, age, goals
-        case heightCm = "height_cm"
-        case weightKg = "weight_kg"
+        case id, name, gender, age, goals, height, weight
+        case weightUnit = "weight_unit"
+        case heightUnit = "height_unit"
         case experienceLevel = "experience_level"
         case availableEquipment = "available_equipment"
         case createdAt = "created_at"
@@ -28,16 +30,18 @@ struct APIUserCreate: Codable, Sendable {
     let name: String
     let gender: String
     let age: Int
-    let heightCm: Double
-    let weightKg: Double
+    let height: Double
+    let weight: Double
+    let weightUnit: String
+    let heightUnit: String
     let experienceLevel: String
     let goals: String
     let availableEquipment: [String]
 
     enum CodingKeys: String, CodingKey {
-        case name, gender, age, goals
-        case heightCm = "height_cm"
-        case weightKg = "weight_kg"
+        case name, gender, age, goals, height, weight
+        case weightUnit = "weight_unit"
+        case heightUnit = "height_unit"
         case experienceLevel = "experience_level"
         case availableEquipment = "available_equipment"
     }
@@ -206,13 +210,13 @@ struct APIPlanGenerateRequest: Codable, Sendable {
 
 struct APISetTarget: Codable, Sendable {
     var setNumber: Int
-    var targetWeightKg: Double?
+    var targetWeight: Double?
     var targetReps: Int
     var targetRpe: Double?
 
     enum CodingKeys: String, CodingKey {
         case setNumber = "set_number"
-        case targetWeightKg = "target_weight_kg"
+        case targetWeight = "target_weight"
         case targetReps = "target_reps"
         case targetRpe = "target_rpe"
     }

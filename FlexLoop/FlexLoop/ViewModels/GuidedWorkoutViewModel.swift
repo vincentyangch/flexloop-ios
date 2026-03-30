@@ -36,7 +36,7 @@ struct GuidedExercise: Identifiable {
 struct GuidedSetTarget: Identifiable {
     let id = UUID()
     let setNumber: Int
-    var targetWeightKg: Double?
+    var targetWeight: Double?
     var targetReps: Int
     var targetRpe: Double?
 }
@@ -44,7 +44,7 @@ struct GuidedSetTarget: Identifiable {
 struct CompletedSet: Identifiable {
     let id = UUID()
     let setNumber: Int
-    var weightKg: Double?
+    var weight: Double?
     var reps: Int?
     var rpe: Double?
     var setType: SetType
@@ -112,7 +112,7 @@ final class GuidedWorkoutViewModel {
                     targets = setsJson.enumerated().map { idx, target in
                         GuidedSetTarget(
                             setNumber: idx + 1,
-                            targetWeightKg: target.targetWeightKg,
+                            targetWeight: target.targetWeight,
                             targetReps: target.targetReps,
                             targetRpe: target.targetRpe
                         )
@@ -121,7 +121,7 @@ final class GuidedWorkoutViewModel {
                     targets = (1...ex.sets).map { num in
                         GuidedSetTarget(
                             setNumber: num,
-                            targetWeightKg: ex.weight,
+                            targetWeight: ex.weight,
                             targetReps: ex.reps,
                             targetRpe: ex.rpeTarget
                         )
@@ -150,7 +150,7 @@ final class GuidedWorkoutViewModel {
     func completeSet(
         exerciseIndex: Int,
         setNumber: Int,
-        weightKg: Double?,
+        weight: Double?,
         reps: Int?,
         rpe: Double?,
         setType: SetType = .working
@@ -159,7 +159,7 @@ final class GuidedWorkoutViewModel {
 
         let completed = CompletedSet(
             setNumber: setNumber,
-            weightKg: weightKg,
+            weight: weight,
             reps: reps,
             rpe: rpe,
             setType: setType
@@ -175,7 +175,7 @@ final class GuidedWorkoutViewModel {
         // Check for PRs asynchronously
         Task {
             await checkPR(exerciseId: exercises[exerciseIndex].exerciseId,
-                          weight: weightKg, reps: reps)
+                          weight: weight, reps: reps)
         }
 
         // Auto-advance to next exercise when all sets are done
@@ -249,12 +249,12 @@ final class GuidedWorkoutViewModel {
         }
     }
 
-    func editCompletedSet(exerciseIndex: Int, setId: UUID, weightKg: Double?, reps: Int?, rpe: Double?) {
+    func editCompletedSet(exerciseIndex: Int, setId: UUID, weight: Double?, reps: Int?, rpe: Double?) {
         guard exercises.indices.contains(exerciseIndex),
               let setIdx = exercises[exerciseIndex].completedSets.firstIndex(where: { $0.id == setId })
         else { return }
 
-        exercises[exerciseIndex].completedSets[setIdx].weightKg = weightKg
+        exercises[exerciseIndex].completedSets[setIdx].weight = weight
         exercises[exerciseIndex].completedSets[setIdx].reps = reps
         exercises[exerciseIndex].completedSets[setIdx].rpe = rpe
     }
@@ -354,7 +354,7 @@ final class GuidedWorkoutViewModel {
                     exerciseServerId: exercise.exerciseId,
                     setNumber: setCounter,
                     setType: completed.setType,
-                    weight: completed.weightKg,
+                    weight: completed.weight,
                     reps: completed.reps,
                     rpe: completed.rpe
                 )
@@ -402,7 +402,7 @@ final class GuidedWorkoutViewModel {
                     targets: ex.targetSets.map { t in
                         SyncSetTarget(
                             setNumber: t.setNumber,
-                            weightKg: t.targetWeightKg,
+                            weight: t.targetWeight,
                             reps: t.targetReps,
                             rpe: t.targetRpe
                         )
@@ -410,7 +410,7 @@ final class GuidedWorkoutViewModel {
                     completedSets: ex.completedSets.map { c in
                         SyncCompletedSet(
                             setNumber: c.setNumber,
-                            weightKg: c.weightKg,
+                            weight: c.weight,
                             reps: c.reps,
                             rpe: c.rpe
                         )

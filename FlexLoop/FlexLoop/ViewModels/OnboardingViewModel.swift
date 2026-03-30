@@ -7,8 +7,9 @@ final class OnboardingViewModel {
     var name = ""
     var gender = "male"
     var age = 25
-    var heightCm = 170.0
-    var weightKg = 70.0
+    var height = 170.0
+    var weight = 70.0
+    var weightUnit: WeightUnit = .kg
     var experienceLevel = "beginner"
     var goals = "general fitness"
     var availableEquipment: Set<String> = []
@@ -17,6 +18,8 @@ final class OnboardingViewModel {
     var isComplete = false
     var isSubmitting = false
     var errorMessage: String?
+
+    var heightUnit: String { weightUnit == .kg ? "cm" : "in" }
 
     let genders = ["male", "female", "other"]
     let experienceLevels = ["beginner", "intermediate", "advanced"]
@@ -32,7 +35,8 @@ final class OnboardingViewModel {
 
         let userData = APIUserCreate(
             name: name, gender: gender, age: age,
-            heightCm: heightCm, weightKg: weightKg,
+            height: height, weight: weight,
+            weightUnit: weightUnit.rawValue, heightUnit: heightUnit,
             experienceLevel: experienceLevel, goals: goals,
             availableEquipment: Array(availableEquipment)
         )
@@ -42,7 +46,8 @@ final class OnboardingViewModel {
 
             let cachedUser = CachedUser(
                 serverId: apiUser.id, name: apiUser.name, gender: apiUser.gender,
-                age: apiUser.age, heightCm: apiUser.heightCm, weightKg: apiUser.weightKg,
+                age: apiUser.age, height: apiUser.height, weight: apiUser.weight,
+                weightUnit: apiUser.weightUnit, heightUnit: apiUser.heightUnit,
                 experienceLevel: apiUser.experienceLevel, goals: apiUser.goals,
                 availableEquipment: apiUser.availableEquipment
             )

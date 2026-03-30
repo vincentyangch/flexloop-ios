@@ -6,6 +6,14 @@ struct ProfileSetupView: View {
 
     var body: some View {
         Form {
+            Section(String(localized: "onboarding.unitSystem")) {
+                Picker("", selection: $viewModel.weightUnit) {
+                    Text("kg").tag(WeightUnit.kg)
+                    Text("lbs").tag(WeightUnit.lbs)
+                }
+                .pickerStyle(.segmented)
+            }
+
             Section("About You") {
                 TextField("Name", text: $viewModel.name)
 
@@ -18,21 +26,21 @@ struct ProfileSetupView: View {
                 HStack {
                     Text("Height")
                     Spacer()
-                    TextField("cm", value: $viewModel.heightCm, format: .number)
+                    TextField(viewModel.weightUnit.heightSymbol, value: $viewModel.height, format: .number)
                         .keyboardType(.decimalPad)
                         .frame(width: 80)
                         .multilineTextAlignment(.trailing)
-                    Text("cm")
+                    Text(viewModel.weightUnit.heightSymbol)
                 }
 
                 HStack {
                     Text("Weight")
                     Spacer()
-                    TextField("kg", value: $viewModel.weightKg, format: .number)
+                    TextField(viewModel.weightUnit.symbol, value: $viewModel.weight, format: .number)
                         .keyboardType(.decimalPad)
                         .frame(width: 80)
                         .multilineTextAlignment(.trailing)
-                    Text("kg")
+                    Text(viewModel.weightUnit.symbol)
                 }
             }
 

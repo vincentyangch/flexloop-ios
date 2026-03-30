@@ -21,14 +21,14 @@ struct SyncExercise: Codable {
 
 struct SyncSetTarget: Codable {
     let setNumber: Int
-    let weightKg: Double?
+    let weight: Double?
     let reps: Int
     let rpe: Double?
 }
 
 struct SyncCompletedSet: Codable {
     let setNumber: Int
-    let weightKg: Double?
+    let weight: Double?
     let reps: Int?
     let rpe: Double?
 }
@@ -38,7 +38,7 @@ struct SyncCompletedSet: Codable {
 struct WatchCompleteSetAction: Codable {
     let exerciseIndex: Int
     let setNumber: Int
-    let weightKg: Double?
+    let weight: Double?
     let reps: Int?
     let rpe: Double?
 }
