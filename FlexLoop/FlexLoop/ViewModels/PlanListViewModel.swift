@@ -70,12 +70,12 @@ final class PlanListViewModel {
         }
     }
 
-    func generatePlan(apiClient: APIClient, userId: Int) async {
+    func generatePlan(apiClient: APIClient, userId: Int, planMode: String) async {
         isGenerating = true
         errorMessage = nil
 
         do {
-            let response = try await apiClient.generatePlan(userId: userId)
+            let response = try await apiClient.generatePlan(userId: userId, planMode: planMode)
             if response.status == "success" {
                 await loadPlans(apiClient: apiClient, userId: userId)
             } else {

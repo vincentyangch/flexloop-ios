@@ -1698,6 +1698,138 @@
           }
         }
       }
+    },
+    "planMode.title": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Choose Plan Mode" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "选择计划模式" } }
+      }
+    },
+    "planMode.fullBody3.name": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Full Body" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "全身训练" } }
+      }
+    },
+    "planMode.fullBody3.subtitle": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "All muscle groups each session" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "每次训练覆盖所有肌群" } }
+      }
+    },
+    "planMode.upperLower4.name": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Upper / Lower" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "上下肢分化" } }
+      }
+    },
+    "planMode.upperLower4.subtitle": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Upper A / Lower A / Upper B / Lower B" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "上肢A / 下肢A / 上肢B / 下肢B" } }
+      }
+    },
+    "planMode.ppl6.name": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Push / Pull / Legs" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "推拉腿" } }
+      }
+    },
+    "planMode.ppl6.subtitle": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "3-way split, repeated twice" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "三分化，重复两次" } }
+      }
+    },
+    "planMode.arnold6.name": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Arnold Split" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "阿诺德分化" } }
+      }
+    },
+    "planMode.arnold6.subtitle": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Chest+Back / Shoulders+Arms / Legs, 2x" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "胸背 / 肩臂 / 腿，重复两次" } }
+      }
+    },
+    "planMode.bodyPart5.name": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Body Part Split" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "部位分化" } }
+      }
+    },
+    "planMode.bodyPart5.subtitle": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Chest / Back / Shoulders / Legs / Arms" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "胸 / 背 / 肩 / 腿 / 臂" } }
+      }
+    },
+    "planMode.ppl3.name": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "PPL (3-Day)" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "推拉腿（3天）" } }
+      }
+    },
+    "planMode.ppl3.subtitle": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Push / Pull / Legs, once through" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "推 / 拉 / 腿，单次循环" } }
+      }
+    },
+    "planMode.phul4.name": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "PHUL" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "PHUL" } }
+      }
+    },
+    "planMode.phul4.subtitle": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Power + Hypertrophy, Upper/Lower" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "力量 + 增肌，上下肢分化" } }
+      }
+    },
+    "planMode.suited.beginner": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Best for beginners" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "适合初学者" } }
+      }
+    },
+    "planMode.suited.intermediate": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Best for intermediates" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "适合中级训练者" } }
+      }
+    },
+    "planMode.suited.intAdvanced": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Intermediate to advanced" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "中级至高级" } }
+      }
+    },
+    "planMode.daysPerCycle.%lld": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "%lld days/cycle" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "%lld天/循环" } }
+      }
+    },
+    "planMode.replaceAlert.title": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Replace Current Plan?" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "替换当前计划？" } }
+      }
+    },
+    "planMode.replaceAlert.message": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Generating a new plan will deactivate your current active plan." } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "生成新计划将停用当前活跃的计划。" } }
+      }
+    },
+    "planMode.replaceAlert.confirm": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Replace" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "替换" } }
+      }
     }
   },
   "version": "1.0"

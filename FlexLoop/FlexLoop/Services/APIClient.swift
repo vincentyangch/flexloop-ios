@@ -162,8 +162,8 @@ actor APIClient {
         try validateResponse(response, data: Data())
     }
 
-    func generatePlan(userId: Int) async throws -> APIPlanGenerateResponse {
-        try await post("/api/ai/plan/generate", body: APIPlanGenerateRequest(userId: userId), timeout: 120)
+    func generatePlan(userId: Int, planMode: String) async throws -> APIPlanGenerateResponse {
+        try await post("/api/ai/plan/generate", body: APIPlanGenerateRequest(userId: userId, planMode: planMode), timeout: 120)
     }
 
     // MARK: - Cycle Tracker

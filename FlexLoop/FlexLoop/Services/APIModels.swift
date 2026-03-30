@@ -202,9 +202,11 @@ struct AIChatResponse: Codable, Sendable {
 
 struct APIPlanGenerateRequest: Codable, Sendable {
     let userId: Int
+    let planMode: String
 
     enum CodingKeys: String, CodingKey {
         case userId = "user_id"
+        case planMode = "plan_mode"
     }
 }
 

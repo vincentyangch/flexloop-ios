@@ -4,6 +4,7 @@ import SwiftData
 struct PlanListView: View {
     @Query private var users: [CachedUser]
     @State private var viewModel = PlanListViewModel()
+    @State private var showModePicker = false
 
     var body: some View {
         NavigationStack {
@@ -20,26 +21,24 @@ struct PlanListView: View {
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
                     Button {
-                        Task { await generatePlan() }
+                        showModePicker = true
                     } label: {
                         Label(String(localized: "plan.generateAI"), systemImage: "sparkles")
                     }
                     .disabled(viewModel.isGenerating)
                 }
             }
-            .overlay {
-                if viewModel.isGenerating {
-                    VStack(spacing: 12) {
-                        ProgressView()
-                        Text(String(localized: "plan.generating"))
-                            .font(.subheadline)
-                            .foregroundStyle(.secondary)
-                    }
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .background(.ultraThinMaterial)
-                }
-            }
             .task { await loadPlans() }
+            .sheet(isPresented: $showModePicker) {
+                PlanModePickerView(
+                    isGenerating: $viewModel.isGenerating,
+                    errorMessage: $viewModel.errorMessage,
+                    hasActivePlan: viewModel.activePlan != nil,
+                    onGenerate: { mode in
+                        Task { await generatePlan(planMode: mode.rawValue) }
+                    }
+                )
+            }
             .alert(String(localized: "common.error"), isPresented: Binding(
                 get: { viewModel.errorMessage != nil },
                 set: { if !$0 { viewModel.errorMessage = nil } }
@@ -105,7 +104,7 @@ struct PlanListView: View {
             Text(String(localized: "plan.empty.description"))
         } actions: {
             Button {
-                Task { await generatePlan() }
+                showModePicker = true
             } label: {
                 Text(String(localized: "plan.generate"))
                     .font(.headline)
@@ -122,10 +121,13 @@ struct PlanListView: View {
         await viewModel.loadPlans(apiClient: apiClient, userId: user.serverId)
     }
 
-    private func generatePlan() async {
+    private func generatePlan(planMode: String) async {
         guard let user = users.first else { return }
         let apiClient = APIClient(config: .current)
-        await viewModel.generatePlan(apiClient: apiClient, userId: user.serverId)
+        await viewModel.generatePlan(apiClient: apiClient, userId: user.serverId, planMode: planMode)
+        if viewModel.errorMessage == nil {
+            showModePicker = false
+        }
     }
 
     private func activatePlan(_ id: Int) async {
