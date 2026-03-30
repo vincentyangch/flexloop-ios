@@ -9,10 +9,8 @@ struct OnboardingView: View {
             TabView(selection: $currentStep) {
                 ProfileSetupView(viewModel: viewModel, onNext: { currentStep = 1 })
                     .tag(0)
-                EquipmentPickerView(viewModel: viewModel, onNext: { currentStep = 2 })
-                    .tag(1)
                 GoalPickerView(viewModel: viewModel)
-                    .tag(2)
+                    .tag(1)
             }
             .tabViewStyle(.page(indexDisplayMode: .always))
             .navigationTitle("Welcome to FlexLoop")

@@ -12,7 +12,6 @@ final class OnboardingViewModel {
     var weightUnit: WeightUnit = .kg
     var experienceLevel = "beginner"
     var goals = "general fitness"
-    var availableEquipment: Set<String> = []
     var daysPerWeek = 3
 
     var isComplete = false
@@ -24,11 +23,6 @@ final class OnboardingViewModel {
     let genders = ["male", "female", "other"]
     let experienceLevels = ["beginner", "intermediate", "advanced"]
     let goalOptions = ["hypertrophy", "strength", "general fitness", "weight loss", "endurance"]
-    let equipmentOptions = [
-        "barbell", "dumbbells", "kettlebells", "pull_up_bar",
-        "cables", "machines", "bands", "bodyweight_only",
-    ]
-
     func submit(apiClient: APIClient, context: ModelContext) async {
         isSubmitting = true
         errorMessage = nil
@@ -38,7 +32,7 @@ final class OnboardingViewModel {
             height: height, weight: weight,
             weightUnit: weightUnit.rawValue, heightUnit: heightUnit,
             experienceLevel: experienceLevel, goals: goals,
-            availableEquipment: Array(availableEquipment)
+            availableEquipment: []
         )
 
         do {
