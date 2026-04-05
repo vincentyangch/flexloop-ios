@@ -12,7 +12,7 @@ struct ExerciseAlternativesSheet: View {
             ScrollView {
                 VStack(spacing: 12) {
                     if let original = originalExercise {
-                        Text(String(localized: "refine.swap.replacing \(original.exerciseName ?? "")"))
+                        Text("Replacing \(original.exerciseName ?? "")")
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
                             .frame(maxWidth: .infinity, alignment: .leading)

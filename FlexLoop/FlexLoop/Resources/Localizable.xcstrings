@@ -1836,6 +1836,186 @@
         "en": { "stringUnit": { "state": "translated", "value": "%lld-day cycle" } },
         "zh-Hans": { "stringUnit": { "state": "translated", "value": "%lld天循环" } }
       }
+    },
+    "refine.alternatives": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Alternatives" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "替代动作" } }
+      }
+    },
+    "refine.whyThis": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Why this?" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "为什么选它?" } }
+      }
+    },
+    "refine.adjustVolume": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "AI Adjust Volume" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "AI 调整训练量" } }
+      }
+    },
+    "refine.explanation.title": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Why This Exercise?" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "为什么选择此动作?" } }
+      }
+    },
+    "refine.swap.title": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Swap Exercise" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "替换动作" } }
+      }
+    },
+    "refine.swap.replacing %@": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Replacing %@" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "替换 %@" } }
+      }
+    },
+    "refine.swap.noAlternatives": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "No Alternatives Found" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "未找到替代动作" } }
+      }
+    },
+    "refine.swap.noAlternativesDesc": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Try the chat refinement for more specific suggestions." } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "尝试使用聊天功能获取更具体的建议。" } }
+      }
+    },
+    "refine.swap.apply": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Apply Swap" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "应用替换" } }
+      }
+    },
+    "refine.volume.title": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Adjust Volume" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "调整训练量" } }
+      }
+    },
+    "refine.volume.noChanges": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "No Changes Suggested" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "无建议更改" } }
+      }
+    },
+    "refine.volume.noChangesDesc": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "The current volume looks appropriate." } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "当前训练量看起来很合适。" } }
+      }
+    },
+    "refine.volume.apply": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Apply Changes" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "应用更改" } }
+      }
+    },
+    "refine.diff.sets": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Sets" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "组数" } }
+      }
+    },
+    "refine.diff.reps": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Reps" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "次数" } }
+      }
+    },
+    "refine.diff.weight": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Weight" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "重量" } }
+      }
+    },
+    "refine.tool.swap": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Swap" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "替换" } }
+      }
+    },
+    "refine.tool.adjust": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Adjust" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "调整" } }
+      }
+    },
+    "refine.tool.add": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Add" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "添加" } }
+      }
+    },
+    "refine.tool.remove": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Remove" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "移除" } }
+      }
+    },
+    "refine.chat.title": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Refine Plan" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "优化计划" } }
+      }
+    },
+    "refine.chat.placeholder": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Ask AI to adjust your plan..." } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "让 AI 调整你的计划..." } }
+      }
+    },
+    "refine.chat.thinking": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Thinking..." } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "思考中..." } }
+      }
+    },
+    "refine.chat.proposedChanges": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Proposed Changes" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "建议更改" } }
+      }
+    },
+    "refine.chat.apply": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Apply Changes" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "应用更改" } }
+      }
+    },
+    "refine.chat.reject": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Reject" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "拒绝" } }
+      }
+    },
+    "error.suggestSwap": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Failed to get alternatives. Please try again." } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "获取替代动作失败，请重试。" } }
+      }
+    },
+    "error.adjustVolume": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Failed to adjust volume. Please try again." } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "调整训练量失败，请重试。" } }
+      }
+    },
+    "error.explain": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Failed to get explanation. Please try again." } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "获取解释失败，请重试。" } }
+      }
+    },
+    "error.refine": {
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Failed to refine plan. Please try again." } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "优化计划失败，请重试。" } }
+      }
     }
   },
   "version": "1.0"
