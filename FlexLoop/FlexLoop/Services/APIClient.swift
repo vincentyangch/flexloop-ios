@@ -166,6 +166,24 @@ actor APIClient {
         try await post("/api/ai/plan/generate", body: APIPlanGenerateRequest(userId: userId, planMode: planMode), timeout: 180)
     }
 
+    // MARK: - Plan Refinement
+
+    func suggestSwap(planId: Int, body: APISuggestSwapRequest) async throws -> APISuggestSwapResponse {
+        try await post("/api/ai/plan/\(planId)/suggest-swap", body: body, timeout: 120)
+    }
+
+    func adjustVolume(planId: Int, body: APIAdjustVolumeRequest) async throws -> APIAdjustVolumeResponse {
+        try await post("/api/ai/plan/\(planId)/adjust-volume", body: body, timeout: 120)
+    }
+
+    func explainExercise(planId: Int, body: APIExplainRequest) async throws -> APIExplainResponse {
+        try await post("/api/ai/plan/\(planId)/explain", body: body, timeout: 60)
+    }
+
+    func refinePlan(planId: Int, body: APIPlanRefineRequest) async throws -> APIPlanRefineResponse {
+        try await post("/api/ai/plan/\(planId)/refine", body: body, timeout: 180)
+    }
+
     // MARK: - Cycle Tracker
 
     func fetchNextWorkout(userId: Int) async throws -> APINextWorkoutResponse {

@@ -462,6 +462,223 @@ struct APIWorkoutSetUpdateResponse: Codable, Sendable {
     let rpe: Double?
 }
 
+// MARK: - Plan Refinement
+
+struct APISuggestSwapRequest: Codable, Sendable {
+    let userId: Int
+    let dayNumber: Int
+    let exerciseName: String
+
+    enum CodingKeys: String, CodingKey {
+        case userId = "user_id"
+        case dayNumber = "day_number"
+        case exerciseName = "exercise_name"
+    }
+}
+
+struct APISwapAlternative: Codable, Sendable, Identifiable {
+    var id: String { exerciseName }
+    let exerciseName: String
+    let exerciseId: Int?
+    let sets: Int?
+    let reps: Int?
+    let rpeTarget: Double?
+    let weight: Double?
+    let reasoning: String
+    let warning: String?
+
+    enum CodingKeys: String, CodingKey {
+        case exerciseName = "exercise_name"
+        case exerciseId = "exercise_id"
+        case sets, reps, weight, reasoning, warning
+        case rpeTarget = "rpe_target"
+    }
+
+    var isAvailable: Bool { exerciseId != nil }
+}
+
+struct APIOriginalExercise: Codable, Sendable {
+    let exerciseId: Int?
+    let exerciseName: String?
+
+    enum CodingKeys: String, CodingKey {
+        case exerciseId = "exercise_id"
+        case exerciseName = "exercise_name"
+    }
+}
+
+struct APISuggestSwapResponse: Codable, Sendable {
+    let status: String
+    let alternatives: [APISwapAlternative]?
+    let original: APIOriginalExercise?
+    let inputTokens: Int?
+    let outputTokens: Int?
+    let message: String?
+
+    enum CodingKeys: String, CodingKey {
+        case status, alternatives, original, message
+        case inputTokens = "input_tokens"
+        case outputTokens = "output_tokens"
+    }
+}
+
+struct APIAdjustVolumeRequest: Codable, Sendable {
+    let userId: Int
+    let dayNumber: Int
+    let direction: String
+
+    enum CodingKeys: String, CodingKey {
+        case userId = "user_id"
+        case dayNumber = "day_number"
+        case direction
+    }
+}
+
+struct APIPlanChange: Codable, Sendable, Identifiable {
+    var id: String { "\(dayNumber)-\(exerciseName)-\(toolName ?? "change")" }
+    let toolName: String?
+    let dayNumber: Int
+    let exerciseName: String
+    let exerciseId: Int?
+    let before: [String: JSONValue]?
+    let after: [String: JSONValue]?
+    let reasoning: String?
+    let warning: String?
+
+    enum CodingKeys: String, CodingKey {
+        case toolName = "tool_name"
+        case dayNumber = "day_number"
+        case exerciseName = "exercise_name"
+        case exerciseId = "exercise_id"
+        case before, after, reasoning, warning
+    }
+
+    /// Helper to read a numeric value from before/after dicts
+    func beforeValue(for key: String) -> String {
+        before?[key]?.displayString ?? "—"
+    }
+
+    func afterValue(for key: String) -> String {
+        after?[key]?.displayString ?? "—"
+    }
+}
+
+/// Lightweight JSON value type for decoding heterogeneous dicts from the server.
+enum JSONValue: Codable, Sendable, Equatable {
+    case int(Int)
+    case double(Double)
+    case string(String)
+    case bool(Bool)
+    case null
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        if container.decodeNil() {
+            self = .null
+        } else if let v = try? container.decode(Int.self) {
+            self = .int(v)
+        } else if let v = try? container.decode(Double.self) {
+            self = .double(v)
+        } else if let v = try? container.decode(Bool.self) {
+            self = .bool(v)
+        } else if let v = try? container.decode(String.self) {
+            self = .string(v)
+        } else {
+            self = .null
+        }
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        switch self {
+        case .int(let v): try container.encode(v)
+        case .double(let v): try container.encode(v)
+        case .string(let v): try container.encode(v)
+        case .bool(let v): try container.encode(v)
+        case .null: try container.encodeNil()
+        }
+    }
+
+    var displayString: String {
+        switch self {
+        case .int(let v): String(v)
+        case .double(let v): String(format: "%.1f", v)
+        case .string(let v): v
+        case .bool(let v): v ? "Yes" : "No"
+        case .null: "—"
+        }
+    }
+}
+
+struct APIAdjustVolumeResponse: Codable, Sendable {
+    let status: String
+    let changes: [APIPlanChange]?
+    let inputTokens: Int?
+    let outputTokens: Int?
+    let message: String?
+
+    enum CodingKeys: String, CodingKey {
+        case status, changes, message
+        case inputTokens = "input_tokens"
+        case outputTokens = "output_tokens"
+    }
+}
+
+struct APIExplainRequest: Codable, Sendable {
+    let userId: Int
+    let dayNumber: Int
+    let exerciseName: String
+
+    enum CodingKeys: String, CodingKey {
+        case userId = "user_id"
+        case dayNumber = "day_number"
+        case exerciseName = "exercise_name"
+    }
+}
+
+struct APIExplainResponse: Codable, Sendable {
+    let status: String
+    let explanation: String?
+    let inputTokens: Int?
+    let outputTokens: Int?
+    let message: String?
+
+    enum CodingKeys: String, CodingKey {
+        case status, explanation, message
+        case inputTokens = "input_tokens"
+        case outputTokens = "output_tokens"
+    }
+}
+
+struct APIPlanRefineRequest: Codable, Sendable {
+    let userId: Int
+    let message: String
+    let history: [[String: String]]
+
+    enum CodingKeys: String, CodingKey {
+        case userId = "user_id"
+        case message, history
+    }
+}
+
+struct APIPlanRefineResponse: Codable, Sendable {
+    let status: String
+    let reply: String?
+    let changes: [APIPlanChange]?
+    let applied: Bool?
+    let maxIterationsReached: Bool?
+    let inputTokens: Int?
+    let outputTokens: Int?
+    let message: String?
+
+    enum CodingKeys: String, CodingKey {
+        case status, reply, changes, applied, message
+        case maxIterationsReached = "max_iterations_reached"
+        case inputTokens = "input_tokens"
+        case outputTokens = "output_tokens"
+    }
+}
+
 // MARK: - Health
 
 struct APIHealthResponse: Codable, Sendable {
