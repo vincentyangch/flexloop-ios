@@ -173,6 +173,8 @@ struct PlanDetailView: View {
     let plan: APIPlanResponse
     @Bindable var viewModel: PlanListViewModel
     @State private var editingDayNumber: Int?
+    @State private var showRefineChat = false
+    @Query private var users: [CachedUser]
 
     var body: some View {
         ScrollView {
@@ -218,6 +220,26 @@ struct PlanDetailView: View {
         }
         .navigationTitle(plan.name)
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .primaryAction) {
+                Button {
+                    showRefineChat = true
+                } label: {
+                    Label(String(localized: "refine.chat.title"), systemImage: "wand.and.sparkles")
+                }
+            }
+        }
+        .sheet(isPresented: $showRefineChat) {
+            if let uid = users.first?.serverId {
+                PlanRefineChatView(planId: plan.id, userId: uid) { changes in
+                    // Apply changes by reloading the plan
+                    Task {
+                        let apiClient = APIClient(config: .current)
+                        await viewModel.loadPlans(apiClient: apiClient, userId: plan.userId)
+                    }
+                }
+            }
+        }
         .sheet(isPresented: Binding(
             get: { editingDayNumber != nil },
             set: { if !$0 { editingDayNumber = nil } }

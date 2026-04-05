@@ -4,13 +4,23 @@ struct PlanExerciseEditView: View {
     @Binding var exercise: EditablePlanExercise
     let exerciseName: String
     let unitSymbol: String
+    var planId: Int?
+    var userId: Int?
+    var dayNumber: Int?
 
     @State private var setTargets: [EditableSetTarget] = []
+    @State private var refinerVM = PlanRefinerViewModel()
+    @State private var showAlternatives = false
+    @State private var showExplanation = false
 
-    init(exercise: Binding<EditablePlanExercise>, exerciseName: String, unitSymbol: String) {
+    init(exercise: Binding<EditablePlanExercise>, exerciseName: String, unitSymbol: String,
+         planId: Int? = nil, userId: Int? = nil, dayNumber: Int? = nil) {
         _exercise = exercise
         self.exerciseName = exerciseName
         self.unitSymbol = unitSymbol
+        self.planId = planId
+        self.userId = userId
+        self.dayNumber = dayNumber
 
         // Initialize set targets from setsJson or generate defaults (values are already in user's unit)
         if let setsJson = exercise.wrappedValue.setsJson, !setsJson.isEmpty {
@@ -54,6 +64,50 @@ struct PlanExerciseEditView: View {
                         .keyboardType(.numberPad)
                         .multilineTextAlignment(.trailing)
                         .frame(width: 60)
+                }
+
+                if planId != nil && userId != nil && dayNumber != nil {
+                    HStack(spacing: 12) {
+                        Button {
+                            let apiClient = APIClient(config: .current)
+                            Task {
+                                await refinerVM.suggestSwap(
+                                    apiClient: apiClient, planId: planId!,
+                                    userId: userId!, dayNumber: dayNumber!,
+                                    exerciseName: exerciseName
+                                )
+                                if !refinerVM.alternatives.isEmpty {
+                                    showAlternatives = true
+                                }
+                            }
+                        } label: {
+                            Label(String(localized: "refine.alternatives"), systemImage: "sparkles")
+                                .font(.subheadline)
+                        }
+                        .disabled(refinerVM.isAnyActionLoading)
+
+                        Button {
+                            let apiClient = APIClient(config: .current)
+                            Task {
+                                await refinerVM.explainExercise(
+                                    apiClient: apiClient, planId: planId!,
+                                    userId: userId!, dayNumber: dayNumber!,
+                                    exerciseName: exerciseName
+                                )
+                                if refinerVM.explanation != nil {
+                                    showExplanation = true
+                                }
+                            }
+                        } label: {
+                            Label(String(localized: "refine.whyThis"), systemImage: "info.circle")
+                                .font(.subheadline)
+                        }
+                        .disabled(refinerVM.isAnyActionLoading)
+
+                        if refinerVM.isAnyActionLoading {
+                            ProgressView()
+                        }
+                    }
                 }
             }
 
@@ -111,6 +165,34 @@ struct PlanExerciseEditView: View {
         }
         .navigationTitle(exerciseName)
         .navigationBarTitleDisplayMode(.inline)
+        .sheet(isPresented: $showAlternatives) {
+            ExerciseAlternativesSheet(
+                alternatives: refinerVM.alternatives,
+                originalExercise: refinerVM.originalExercise,
+                onSelect: { alt in
+                    // Update the current exercise with the selected alternative
+                    if let newId = alt.exerciseId {
+                        exercise.exerciseId = newId
+                    }
+                    if let sets = alt.sets { exercise.sets = sets; adjustSetCount(to: sets) }
+                    if let reps = alt.reps { exercise.reps = reps }
+                    exercise.rpeTarget = alt.rpeTarget
+                    exercise.weight = alt.weight
+                    refinerVM.clearSwap()
+                }
+            )
+        }
+        .popover(isPresented: $showExplanation) {
+            VStack(alignment: .leading, spacing: 12) {
+                Text(String(localized: "refine.explanation.title"))
+                    .font(.headline)
+                Text(refinerVM.explanation ?? "")
+                    .font(.body)
+            }
+            .padding()
+            .frame(maxWidth: 400)
+            .presentationCompactAdaptation(.popover)
+        }
         .onDisappear {
             // Sync back to exercise (values are stored as-is, no conversion needed)
             exercise.sets = setTargets.count

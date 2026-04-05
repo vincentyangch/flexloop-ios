@@ -11,10 +11,13 @@ struct PlanDayEditView: View {
     @State private var focus: String
     @State private var exercises: [EditablePlanExercise]
     @State private var showExercisePicker = false
+    @State private var showVolumeDiff = false
+    @State private var refinerVM = PlanRefinerViewModel()
 
     @Query(sort: \CachedExercise.name) private var cachedExercises: [CachedExercise]
     @Query private var users: [CachedUser]
     private var unitSymbol: String { users.first?.weightUnit ?? "kg" }
+    private var userId: Int? { users.first?.serverId }
 
     var onSave: (([EditablePlanExercise], String, String) -> Void)?
 
@@ -58,7 +61,10 @@ struct PlanDayEditView: View {
                             PlanExerciseEditView(
                                 exercise: $exercise,
                                 exerciseName: exerciseName(exercise.exerciseId),
-                                unitSymbol: unitSymbol
+                                unitSymbol: unitSymbol,
+                                planId: planId,
+                                userId: userId,
+                                dayNumber: day.dayNumber
                             )
                         } label: {
                             HStack {
@@ -78,6 +84,25 @@ struct PlanDayEditView: View {
                         showExercisePicker = true
                     } label: {
                         Label(String(localized: "plan.edit.addExercise"), systemImage: "plus")
+                    }
+
+                    if let uid = userId {
+                        Button {
+                            let apiClient = APIClient(config: .current)
+                            Task {
+                                await refinerVM.adjustVolume(
+                                    apiClient: apiClient, planId: planId,
+                                    userId: uid, dayNumber: day.dayNumber,
+                                    direction: "auto"
+                                )
+                                if !refinerVM.volumeChanges.isEmpty {
+                                    showVolumeDiff = true
+                                }
+                            }
+                        } label: {
+                            Label(String(localized: "refine.adjustVolume"), systemImage: "sparkles")
+                        }
+                        .disabled(refinerVM.isAnyActionLoading)
                     }
                 }
             }
@@ -114,6 +139,28 @@ struct PlanDayEditView: View {
                         notes: nil
                     )
                     exercises.append(newExercise)
+                }
+            }
+            .sheet(isPresented: $showVolumeDiff) {
+                VolumeDiffSheet(changes: refinerVM.volumeChanges) {
+                    // Apply volume changes to local exercises
+                    for change in refinerVM.volumeChanges {
+                        if let idx = exercises.firstIndex(where: { $0.exerciseId == change.exerciseId }) {
+                            if let sets = change.after?["sets"]?.displayString, let s = Int(sets) {
+                                exercises[idx].sets = s
+                            }
+                            if let reps = change.after?["reps"]?.displayString, let r = Int(reps) {
+                                exercises[idx].reps = r
+                            }
+                            if let rpe = change.after?["rpe_target"]?.displayString, let r = Double(rpe) {
+                                exercises[idx].rpeTarget = r
+                            }
+                            if let weight = change.after?["weight"]?.displayString, let w = Double(weight) {
+                                exercises[idx].weight = w
+                            }
+                        }
+                    }
+                    refinerVM.clearVolume()
                 }
             }
         }
