@@ -80,7 +80,7 @@ struct PlanChangeDiffCard: View {
                     .foregroundStyle(.secondary)
                 Text(after)
                     .font(.caption.bold())
-                    .foregroundStyle(.accentColor)
+                    .foregroundStyle(Color.accentColor)
             } else {
                 Text(after)
                     .font(.caption)

@@ -105,7 +105,7 @@ private struct DiffColumn: View {
                     .foregroundStyle(.secondary)
                 Text(after)
                     .font(.callout.bold())
-                    .foregroundStyle(.accentColor)
+                    .foregroundStyle(Color.accentColor)
             } else {
                 Text(after)
                     .font(.callout)
