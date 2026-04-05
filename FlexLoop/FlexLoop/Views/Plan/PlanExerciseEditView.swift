@@ -182,16 +182,22 @@ struct PlanExerciseEditView: View {
                 }
             )
         }
-        .popover(isPresented: $showExplanation) {
-            VStack(alignment: .leading, spacing: 12) {
-                Text(String(localized: "refine.explanation.title"))
-                    .font(.headline)
-                Text(refinerVM.explanation ?? "")
-                    .font(.body)
+        .sheet(isPresented: $showExplanation) {
+            NavigationStack {
+                ScrollView {
+                    Text(refinerVM.explanation ?? "")
+                        .font(.body)
+                        .padding()
+                }
+                .navigationTitle(String(localized: "refine.explanation.title"))
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .cancellationAction) {
+                        Button(String(localized: "common.cancel")) { showExplanation = false }
+                    }
+                }
             }
-            .padding()
-            .frame(maxWidth: 400)
-            .presentationCompactAdaptation(.popover)
+            .presentationDetents([.medium, .large])
         }
         .onDisappear {
             // Sync back to exercise (values are stored as-is, no conversion needed)
