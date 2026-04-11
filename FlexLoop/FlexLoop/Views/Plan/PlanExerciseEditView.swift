@@ -84,6 +84,7 @@ struct PlanExerciseEditView: View {
                             Label(String(localized: "refine.alternatives"), systemImage: "sparkles")
                                 .font(.subheadline)
                         }
+                        .buttonStyle(.borderless)
                         .disabled(refinerVM.isAnyActionLoading)
 
                         Button {
@@ -102,6 +103,7 @@ struct PlanExerciseEditView: View {
                             Label(String(localized: "refine.whyThis"), systemImage: "info.circle")
                                 .font(.subheadline)
                         }
+                        .buttonStyle(.borderless)
                         .disabled(refinerVM.isAnyActionLoading)
 
                         if refinerVM.isAnyActionLoading {
