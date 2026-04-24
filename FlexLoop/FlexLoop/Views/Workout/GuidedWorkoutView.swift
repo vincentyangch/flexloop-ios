@@ -216,10 +216,6 @@ struct GuidedWorkoutView: View {
             if viewModel.isLastExercise {
                 Button {
                     viewModel.finishWorkout(context: context, userId: userId, planDayId: planDayId)
-                    Task {
-                        let apiClient = APIClient(config: .current)
-                        await viewModel.advanceCycle(apiClient: apiClient, userId: userId)
-                    }
                 } label: {
                     Text(String(localized: "workout.finishWorkout"))
                         .font(.headline)

@@ -54,11 +54,20 @@ struct HomeView: View {
             }
             .onChange(of: showGuidedWorkout) { _, isShowing in
                 if !isShowing {
-                    // Refresh after workout
                     viewModel.loadDashboard(context: context)
                     Task {
                         guard let user = users.first else { return }
                         let apiClient = APIClient(config: .current)
+                        do {
+                            _ = try await SyncService.performSync(
+                                apiClient: apiClient,
+                                context: context,
+                                userId: user.serverId
+                            )
+                            viewModel.loadDashboard(context: context)
+                        } catch {
+                            print("Post-workout sync failed: \(error.localizedDescription)")
+                        }
                         await viewModel.loadNextWorkout(apiClient: apiClient, userId: user.serverId)
                     }
                 }

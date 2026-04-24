@@ -424,11 +424,4 @@ final class GuidedWorkoutViewModel {
         )
     }
 
-    func advanceCycle(apiClient: APIClient, userId: Int) async {
-        do {
-            _ = try await apiClient.completeWorkout(userId: userId)
-        } catch {
-            // Non-critical — cycle will be advanced on next sync
-        }
-    }
 }

@@ -331,7 +331,6 @@ struct APIClientTests {
 
     @Test func buildURL() {
         let config = ServerConfig(baseURL: "http://localhost:8000")
-        let client = APIClient(config: config)
         // We can't call actor methods synchronously, but we can verify construction
         #expect(config.baseURL == "http://localhost:8000")
     }
