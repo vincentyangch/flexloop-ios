@@ -1,6 +1,6 @@
 import Foundation
 
-enum APIError: Error, LocalizedError {
+nonisolated enum APIError: Error, LocalizedError {
     case invalidURL
     case requestFailed(statusCode: Int, body: String)
     case decodingFailed(Error)
@@ -217,4 +217,4 @@ actor APIClient {
     }
 }
 
-struct EmptyBody: Codable, Sendable {}
+nonisolated struct EmptyBody: Codable, Sendable {}

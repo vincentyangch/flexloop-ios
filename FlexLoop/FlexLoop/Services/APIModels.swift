@@ -2,7 +2,7 @@ import Foundation
 
 // MARK: - User / Profile
 
-struct APIUser: Codable, Sendable {
+nonisolated struct APIUser: Codable, Sendable {
     let id: Int
     let name: String
     let gender: String
@@ -26,7 +26,7 @@ struct APIUser: Codable, Sendable {
     }
 }
 
-struct APIUserCreate: Codable, Sendable {
+nonisolated struct APIUserCreate: Codable, Sendable {
     let name: String
     let gender: String
     let age: Int
@@ -49,7 +49,7 @@ struct APIUserCreate: Codable, Sendable {
 
 // MARK: - Exercise
 
-struct APIExercise: Codable, Identifiable, Sendable {
+nonisolated struct APIExercise: Codable, Identifiable, Sendable {
     let id: Int
     let name: String
     let muscleGroup: String
@@ -63,14 +63,14 @@ struct APIExercise: Codable, Identifiable, Sendable {
     }
 }
 
-struct APIExerciseList: Codable, Sendable {
+nonisolated struct APIExerciseList: Codable, Sendable {
     let exercises: [APIExercise]
     let total: Int
 }
 
 // MARK: - Workout
 
-struct APIWorkoutSet: Codable, Identifiable, Sendable {
+nonisolated struct APIWorkoutSet: Codable, Identifiable, Sendable {
     let id: Int?
     let exerciseId: Int
     let exerciseGroupId: Int?
@@ -95,7 +95,7 @@ struct APIWorkoutSet: Codable, Identifiable, Sendable {
     }
 }
 
-struct APIWorkoutSession: Codable, Identifiable, Sendable {
+nonisolated struct APIWorkoutSession: Codable, Identifiable, Sendable {
     let id: Int
     let userId: Int
     let planDayId: Int?
@@ -116,7 +116,7 @@ struct APIWorkoutSession: Codable, Identifiable, Sendable {
 
 // MARK: - Sync
 
-struct APISyncRequest: Codable, Sendable {
+nonisolated struct APISyncRequest: Codable, Sendable {
     let userId: Int
     let workouts: [APISyncWorkout]
 
@@ -126,7 +126,7 @@ struct APISyncRequest: Codable, Sendable {
     }
 }
 
-struct APISyncWorkout: Codable, Sendable {
+nonisolated struct APISyncWorkout: Codable, Sendable {
     let planDayId: Int?
     let source: String
     let startedAt: String
@@ -142,7 +142,7 @@ struct APISyncWorkout: Codable, Sendable {
     }
 }
 
-struct APISyncSet: Codable, Sendable {
+nonisolated struct APISyncSet: Codable, Sendable {
     let exerciseId: Int
     let exerciseGroupId: Int?
     let setNumber: Int
@@ -166,7 +166,7 @@ struct APISyncSet: Codable, Sendable {
     }
 }
 
-struct APISyncResponse: Codable, Sendable {
+nonisolated struct APISyncResponse: Codable, Sendable {
     let workoutsSynced: Int
 
     enum CodingKeys: String, CodingKey {
@@ -176,7 +176,7 @@ struct APISyncResponse: Codable, Sendable {
 
 // MARK: - AI
 
-struct AIChatRequest: Codable, Sendable {
+nonisolated struct AIChatRequest: Codable, Sendable {
     let userId: Int
     let message: String
 
@@ -186,7 +186,7 @@ struct AIChatRequest: Codable, Sendable {
     }
 }
 
-struct AIChatResponse: Codable, Sendable {
+nonisolated struct AIChatResponse: Codable, Sendable {
     let reply: String
     let inputTokens: Int
     let outputTokens: Int
@@ -200,7 +200,7 @@ struct AIChatResponse: Codable, Sendable {
 
 // MARK: - Plan
 
-struct APIPlanGenerateRequest: Codable, Sendable {
+nonisolated struct APIPlanGenerateRequest: Codable, Sendable {
     let userId: Int
     let planMode: String
 
@@ -210,7 +210,7 @@ struct APIPlanGenerateRequest: Codable, Sendable {
     }
 }
 
-struct APISetTarget: Codable, Sendable {
+nonisolated struct APISetTarget: Codable, Sendable {
     var setNumber: Int
     var targetWeight: Double?
     var targetReps: Int
@@ -224,7 +224,7 @@ struct APISetTarget: Codable, Sendable {
     }
 }
 
-struct APIPlanExercise: Codable, Sendable, Identifiable {
+nonisolated struct APIPlanExercise: Codable, Sendable, Identifiable {
     let id: Int?
     let exerciseId: Int
     var order: Int
@@ -256,7 +256,7 @@ struct APIPlanExercise: Codable, Sendable, Identifiable {
     }
 }
 
-struct APIPlanExerciseGroup: Codable, Sendable, Identifiable {
+nonisolated struct APIPlanExerciseGroup: Codable, Sendable, Identifiable {
     let id: Int?
     let groupType: String
     let order: Int
@@ -279,7 +279,7 @@ struct APIPlanExerciseGroup: Codable, Sendable, Identifiable {
     }
 }
 
-struct APIPlanDay: Codable, Sendable, Identifiable {
+nonisolated struct APIPlanDay: Codable, Sendable, Identifiable {
     let id: Int?
     let dayNumber: Int
     var label: String
@@ -293,7 +293,7 @@ struct APIPlanDay: Codable, Sendable, Identifiable {
     }
 }
 
-struct APIPlanResponse: Codable, Sendable, Identifiable {
+nonisolated struct APIPlanResponse: Codable, Sendable, Identifiable {
     let id: Int
     let userId: Int
     let name: String
@@ -316,12 +316,12 @@ struct APIPlanResponse: Codable, Sendable, Identifiable {
     }
 }
 
-struct APIPlanListResponse: Codable, Sendable {
+nonisolated struct APIPlanListResponse: Codable, Sendable {
     let plans: [APIPlanResponse]
     let total: Int
 }
 
-struct APIPlanCreate: Codable, Sendable {
+nonisolated struct APIPlanCreate: Codable, Sendable {
     let userId: Int
     let name: String
     let splitType: String
@@ -336,7 +336,7 @@ struct APIPlanCreate: Codable, Sendable {
     }
 }
 
-struct APIPlanDayCreate: Codable, Sendable {
+nonisolated struct APIPlanDayCreate: Codable, Sendable {
     let dayNumber: Int
     let label: String
     let focus: String
@@ -349,7 +349,7 @@ struct APIPlanDayCreate: Codable, Sendable {
     }
 }
 
-struct APIPlanExerciseGroupCreate: Codable, Sendable {
+nonisolated struct APIPlanExerciseGroupCreate: Codable, Sendable {
     let groupType: String
     let order: Int
     let restAfterGroupSec: Int
@@ -362,7 +362,7 @@ struct APIPlanExerciseGroupCreate: Codable, Sendable {
     }
 }
 
-struct APIPlanExerciseCreate: Codable, Sendable {
+nonisolated struct APIPlanExerciseCreate: Codable, Sendable {
     let exerciseId: Int
     let order: Int
     let sets: Int
@@ -380,7 +380,7 @@ struct APIPlanExerciseCreate: Codable, Sendable {
     }
 }
 
-struct APIPlanUpdate: Codable, Sendable {
+nonisolated struct APIPlanUpdate: Codable, Sendable {
     let name: String?
     let splitType: String?
     let cycleLength: Int?
@@ -393,7 +393,7 @@ struct APIPlanUpdate: Codable, Sendable {
     }
 }
 
-struct APIPlanGenerateResponse: Codable, Sendable {
+nonisolated struct APIPlanGenerateResponse: Codable, Sendable {
     let status: String
     let planId: Int?
     let planName: String?
@@ -419,7 +419,7 @@ struct APIPlanGenerateResponse: Codable, Sendable {
 
 // MARK: - Cycle Tracker
 
-struct APINextWorkoutResponse: Codable, Sendable {
+nonisolated struct APINextWorkoutResponse: Codable, Sendable {
     let planId: Int
     let planName: String
     let cycleLength: Int
@@ -437,7 +437,7 @@ struct APINextWorkoutResponse: Codable, Sendable {
     }
 }
 
-struct APICompleteWorkoutResponse: Codable, Sendable {
+nonisolated struct APICompleteWorkoutResponse: Codable, Sendable {
     let completedDayNumber: Int
     let nextDayNumber: Int
     let cycleLength: Int
@@ -449,13 +449,13 @@ struct APICompleteWorkoutResponse: Codable, Sendable {
     }
 }
 
-struct APIWorkoutSetUpdate: Codable, Sendable {
+nonisolated struct APIWorkoutSetUpdate: Codable, Sendable {
     let weight: Double?
     let reps: Int?
     let rpe: Double?
 }
 
-struct APIWorkoutSetUpdateResponse: Codable, Sendable {
+nonisolated struct APIWorkoutSetUpdateResponse: Codable, Sendable {
     let id: Int
     let weight: Double?
     let reps: Int?
@@ -464,7 +464,7 @@ struct APIWorkoutSetUpdateResponse: Codable, Sendable {
 
 // MARK: - Plan Refinement
 
-struct APISuggestSwapRequest: Codable, Sendable {
+nonisolated struct APISuggestSwapRequest: Codable, Sendable {
     let userId: Int
     let dayNumber: Int
     let exerciseName: String
@@ -476,7 +476,7 @@ struct APISuggestSwapRequest: Codable, Sendable {
     }
 }
 
-struct APISwapAlternative: Codable, Sendable, Identifiable {
+nonisolated struct APISwapAlternative: Codable, Sendable, Identifiable {
     var id: String { exerciseName }
     let exerciseName: String
     let exerciseId: Int?
@@ -497,7 +497,7 @@ struct APISwapAlternative: Codable, Sendable, Identifiable {
     var isAvailable: Bool { exerciseId != nil }
 }
 
-struct APIOriginalExercise: Codable, Sendable {
+nonisolated struct APIOriginalExercise: Codable, Sendable {
     let exerciseId: Int?
     let exerciseName: String?
 
@@ -507,7 +507,7 @@ struct APIOriginalExercise: Codable, Sendable {
     }
 }
 
-struct APISuggestSwapResponse: Codable, Sendable {
+nonisolated struct APISuggestSwapResponse: Codable, Sendable {
     let status: String
     let alternatives: [APISwapAlternative]?
     let original: APIOriginalExercise?
@@ -522,7 +522,7 @@ struct APISuggestSwapResponse: Codable, Sendable {
     }
 }
 
-struct APIAdjustVolumeRequest: Codable, Sendable {
+nonisolated struct APIAdjustVolumeRequest: Codable, Sendable {
     let userId: Int
     let dayNumber: Int
     let direction: String
@@ -534,7 +534,7 @@ struct APIAdjustVolumeRequest: Codable, Sendable {
     }
 }
 
-struct APIPlanChange: Codable, Sendable, Identifiable {
+nonisolated struct APIPlanChange: Codable, Sendable, Identifiable {
     var id: String { "\(dayNumber)-\(exerciseName)-\(toolName ?? "change")" }
     let toolName: String?
     let dayNumber: Int
@@ -564,7 +564,7 @@ struct APIPlanChange: Codable, Sendable, Identifiable {
 }
 
 /// Lightweight JSON value type for decoding heterogeneous dicts from the server.
-enum JSONValue: Codable, Sendable, Equatable {
+nonisolated enum JSONValue: Codable, Sendable, Equatable {
     case int(Int)
     case double(Double)
     case string(String)
@@ -610,7 +610,7 @@ enum JSONValue: Codable, Sendable, Equatable {
     }
 }
 
-struct APIAdjustVolumeResponse: Codable, Sendable {
+nonisolated struct APIAdjustVolumeResponse: Codable, Sendable {
     let status: String
     let changes: [APIPlanChange]?
     let inputTokens: Int?
@@ -624,7 +624,7 @@ struct APIAdjustVolumeResponse: Codable, Sendable {
     }
 }
 
-struct APIExplainRequest: Codable, Sendable {
+nonisolated struct APIExplainRequest: Codable, Sendable {
     let userId: Int
     let dayNumber: Int
     let exerciseName: String
@@ -636,7 +636,7 @@ struct APIExplainRequest: Codable, Sendable {
     }
 }
 
-struct APIExplainResponse: Codable, Sendable {
+nonisolated struct APIExplainResponse: Codable, Sendable {
     let status: String
     let explanation: String?
     let inputTokens: Int?
@@ -650,7 +650,7 @@ struct APIExplainResponse: Codable, Sendable {
     }
 }
 
-struct APIPlanRefineRequest: Codable, Sendable {
+nonisolated struct APIPlanRefineRequest: Codable, Sendable {
     let userId: Int
     let message: String
     let history: [[String: String]]
@@ -661,7 +661,7 @@ struct APIPlanRefineRequest: Codable, Sendable {
     }
 }
 
-struct APIPlanRefineResponse: Codable, Sendable {
+nonisolated struct APIPlanRefineResponse: Codable, Sendable {
     let status: String
     let reply: String?
     let changes: [APIPlanChange]?
@@ -681,7 +681,7 @@ struct APIPlanRefineResponse: Codable, Sendable {
 
 // MARK: - Health
 
-struct APIHealthResponse: Codable, Sendable {
+nonisolated struct APIHealthResponse: Codable, Sendable {
     let status: String
     let version: String
 }

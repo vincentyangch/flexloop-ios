@@ -37,8 +37,8 @@ final class ProgressViewModel {
         errorMessage = nil
 
         do {
-            async let e1rmTask = loadE1RM(apiClient: apiClient, userId: userId)
-            async let volumeTask = loadVolume(apiClient: apiClient, userId: userId)
+            async let e1rmTask: Void = loadE1RM(apiClient: apiClient, userId: userId)
+            async let volumeTask: Void = loadVolume(apiClient: apiClient, userId: userId)
             _ = try await (e1rmTask, volumeTask)
         } catch {
             errorMessage = "Could not load progress data."

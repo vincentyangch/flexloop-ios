@@ -81,9 +81,10 @@ struct ModelTests {
     }
 }
 
-// MARK: - ActiveWorkoutViewModel Tests
+// MARK: - GuidedWorkoutViewModel Tests
 
-struct ActiveWorkoutViewModelTests {
+@MainActor
+struct GuidedWorkoutViewModelTests {
 
     private func makeContext() throws -> ModelContext {
         let config = ModelConfiguration(isStoredInMemoryOnly: true)
@@ -96,64 +97,177 @@ struct ActiveWorkoutViewModelTests {
         return ModelContext(container)
     }
 
-    @Test func startWorkoutCreatesSession() throws {
-        let context = try makeContext()
-        let vm = ActiveWorkoutViewModel()
-        vm.startWorkout(context: context)
+    private func makePlanDay() throws -> APIPlanDay {
+        let json = """
+        {
+          "id": 7,
+          "day_number": 1,
+          "label": "Push",
+          "focus": "Chest and Shoulders",
+          "exercise_groups": [
+            {
+              "id": 11,
+              "group_type": "straight",
+              "order": 1,
+              "rest_after_group_sec": 90,
+              "exercises": [
+                {
+                  "id": 1011,
+                  "exercise_id": 101,
+                  "order": 1,
+                  "sets": 2,
+                  "reps": 5,
+                  "weight": 100.0,
+                  "rpe_target": 8.0,
+                  "sets_json": [
+                    {
+                      "set_number": 1,
+                      "target_weight": 95.0,
+                      "target_reps": 5,
+                      "target_rpe": 7.5
+                    },
+                    {
+                      "set_number": 2,
+                      "target_weight": 100.0,
+                      "target_reps": 5,
+                      "target_rpe": 8.0
+                    }
+                  ],
+                  "notes": "Pause first rep"
+                },
+                {
+                  "id": 1012,
+                  "exercise_id": 102,
+                  "order": 2,
+                  "sets": 3,
+                  "reps": 8,
+                  "weight": 60.0,
+                  "rpe_target": 7.0,
+                  "sets_json": null,
+                  "notes": null
+                }
+              ]
+            }
+          ]
+        }
+        """
+        return try JSONDecoder().decode(APIPlanDay.self, from: Data(json.utf8))
+    }
 
-        #expect(vm.currentSession != nil)
-        #expect(vm.currentSession?.completedAt == nil)
+    @Test func loadFromPlanDayBuildsGuidedExercises() throws {
+        let vm = GuidedWorkoutViewModel()
+        let day = try makePlanDay()
+
+        vm.loadFromPlanDay(day, exerciseNames: [101: "Bench Press", 102: "Overhead Press"])
+
         #expect(vm.isWorkoutActive == true)
+        #expect(vm.startedAt != nil)
+        #expect(vm.currentExerciseIndex == 0)
+        #expect(vm.exercises.count == 2)
+        #expect(vm.progress == "0/2")
+
+        let first = try #require(vm.exercises.first)
+        #expect(first.exerciseId == 101)
+        #expect(first.planExerciseId == 1011)
+        #expect(first.name == "Bench Press")
+        #expect(first.restSeconds == 90)
+        #expect(first.notes == "Pause first rep")
+        #expect(first.targetSets.count == 2)
+        #expect(first.targetSets[0].targetWeight == 95.0)
+        #expect(first.targetSets[0].targetReps == 5)
+        #expect(first.targetSets[0].targetRpe == 7.5)
+
+        let second = try #require(vm.exercises.last)
+        #expect(second.name == "Overhead Press")
+        #expect(second.targetSets.count == 3)
+        #expect(second.targetSets[0].targetWeight == 60.0)
+        #expect(second.targetSets[0].targetReps == 8)
+        #expect(second.targetSets[0].targetRpe == 7.0)
     }
 
-    @Test func logSetAddsToSession() throws {
-        let context = try makeContext()
-        let vm = ActiveWorkoutViewModel()
-        vm.startWorkout(context: context)
+    @Test func completeSetAddsCompletedSetAndCanEditIt() throws {
+        let vm = GuidedWorkoutViewModel()
+        let day = try makePlanDay()
+        vm.loadFromPlanDay(day, exerciseNames: [101: "Bench Press", 102: "Overhead Press"])
 
-        vm.logSet(exerciseId: 1, weight: 100, reps: 5, rpe: 8.0,
-                  setType: .working, context: context)
+        vm.completeSet(exerciseIndex: 0, setNumber: 1, weight: 97.5, reps: 5, rpe: 8.0)
+        defer { vm.stopRestTimer() }
 
-        #expect(vm.loggedSets.count == 1)
-        #expect(vm.loggedSets.first?.weight == 100)
-        #expect(vm.loggedSets.first?.reps == 5)
-        #expect(vm.loggedSets.first?.setNumber == 1)
+        let firstExercise = try #require(vm.exercises.first)
+        let completed = try #require(firstExercise.completedSets.first)
+        #expect(completed.setNumber == 1)
+        #expect(completed.weight == 97.5)
+        #expect(completed.reps == 5)
+        #expect(completed.rpe == 8.0)
+        #expect(completed.setType == .working)
+        #expect(vm.isRestTimerActive == true)
+        #expect(vm.restTimeRemaining == 120)
+        #expect(vm.currentExerciseIndex == 0)
+        #expect(vm.progress == "1/2")
+
+        vm.editCompletedSet(exerciseIndex: 0, setId: completed.id, weight: 100.0, reps: 4, rpe: 8.5)
+
+        let edited = try #require(vm.exercises.first?.completedSets.first)
+        #expect(edited.weight == 100.0)
+        #expect(edited.reps == 4)
+        #expect(edited.rpe == 8.5)
     }
 
-    @Test func logMultipleSetsIncrementsSetNumber() throws {
-        let context = try makeContext()
-        let vm = ActiveWorkoutViewModel()
-        vm.startWorkout(context: context)
+    @Test func skipExerciseMarksCurrentExerciseAndAdvances() throws {
+        let vm = GuidedWorkoutViewModel()
+        let day = try makePlanDay()
+        vm.loadFromPlanDay(day, exerciseNames: [101: "Bench Press", 102: "Overhead Press"])
 
-        vm.logSet(exerciseId: 1, weight: 100, reps: 5, context: context)
-        vm.logSet(exerciseId: 1, weight: 100, reps: 5, context: context)
-        vm.logSet(exerciseId: 1, weight: 100, reps: 4, context: context)
+        vm.skipExercise()
 
-        #expect(vm.loggedSets.count == 3)
-        #expect(vm.loggedSets[0].setNumber == 1)
-        #expect(vm.loggedSets[1].setNumber == 2)
-        #expect(vm.loggedSets[2].setNumber == 3)
+        #expect(vm.exercises[0].isSkipped == true)
+        #expect(vm.currentExerciseIndex == 1)
+        #expect(vm.progress == "0/1")
     }
 
-    @Test func completeWorkoutSetsTimestamp() throws {
+    @Test func finishWorkoutPersistsSessionSetsAndSummary() throws {
         let context = try makeContext()
-        let vm = ActiveWorkoutViewModel()
-        vm.startWorkout(context: context)
-        vm.completeWorkout(context: context)
+        let vm = GuidedWorkoutViewModel()
+        let day = try makePlanDay()
+        vm.loadFromPlanDay(day, exerciseNames: [101: "Bench Press", 102: "Overhead Press"])
+        vm.startedAt = nil
+        vm.exercises[0].completedSets.append(
+            CompletedSet(setNumber: 1, weight: 100.0, reps: 5, rpe: 8.0, setType: .working)
+        )
+        vm.exercises[1].isSkipped = true
 
-        #expect(vm.currentSession?.completedAt != nil)
+        vm.finishWorkout(context: context, userId: 42, planDayId: 7)
+
+        let descriptor = FetchDescriptor<CachedWorkoutSession>()
+        let sessions = try context.fetch(descriptor)
+        let session = try #require(sessions.first)
+        let savedSet = try #require(session.sets?.first)
+
+        #expect(sessions.count == 1)
+        #expect(session.userId == 42)
+        #expect(session.planDayId == 7)
+        #expect(session.source == .plan)
+        #expect(session.completedAt != nil)
+        #expect(session.isSynced == false)
+        #expect(savedSet.exerciseServerId == 101)
+        #expect(savedSet.setNumber == 1)
+        #expect(savedSet.weight == 100.0)
+        #expect(savedSet.reps == 5)
+        #expect(savedSet.rpe == 8.0)
         #expect(vm.isWorkoutActive == false)
+        #expect(vm.showSummary == true)
+        #expect(vm.workoutSummary?.exercisesCompleted == 1)
+        #expect(vm.workoutSummary?.exercisesSkipped == 1)
+        #expect(vm.workoutSummary?.totalSets == 1)
     }
 
-    @Test func restTimerStartsAndStops() throws {
-        let vm = ActiveWorkoutViewModel()
+    @Test func restTimerStartsAndStops() {
+        let vm = GuidedWorkoutViewModel()
         vm.startRestTimer(seconds: 90)
-
         #expect(vm.isRestTimerActive == true)
         #expect(vm.restTimeRemaining == 90)
 
         vm.stopRestTimer()
-
         #expect(vm.isRestTimerActive == false)
         #expect(vm.restTimeRemaining == 0)
     }
